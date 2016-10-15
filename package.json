@@ -1,0 +1,20 @@
+{
+  "name": "Hamster",
+  "version": "0.0.1",
+  "description": "A light-weight simply library",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": {
+    "name": "Sangliang",
+    "email": "378305868@qq.com"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-webserver": "^0.9.1"
+  }
+}
