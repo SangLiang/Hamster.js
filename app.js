@@ -1,54 +1,90 @@
 var Hamster = {};
 
-// 主canvas
-Hamster.init = function(id,width,height){
+Hamster.spriteList = [];
+Hamster.ctx = null;
+Hamster.timeloop = null;
+/**
+ * 主canvas,设置canvas的值
+ * @id {id}
+ * @width {number}
+ * @height {number}
+ * @background {css color}
+ */
+Hamster.init = function (id, width, height, timeloop, background) {
 	var canvas = document.getElementById(id);
 	var ctx = canvas.getContext('2d');
 	Hamster.ctx = ctx;
+	Hamster.timeloop = timeloop || 60;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.style.background = "#333";
+	canvas.style.background = background || "#333";
 	canvas.style.margin = "0px auto";
 	canvas.style.display = "block";
 	canvas.style.boxShadow = "4px 4px 4px #888888";
-	// Hamster.add();
+
+	// Hamster.gameLoop();
 };
 
-// 游戏角色
-Hamster.sprite = function(x,y,image){
+/**
+ * 游戏精灵
+ * @name {string}
+ * @image {string}
+ * @x {number}
+ * @y {number}
+ */
+Hamster.sprite = function (name, image, x, y) {
 	var self = this;
-	this.name = "name";
-	this.x = x||0;
-	this.y = y||0;
-	this.child = [];
-	this.texture = new Image();
-	this.texture.src = image;
-	this.texture.onload = function(){
+	self.name = "name";
+	self.x = x || 0;
+	self.y = y || 0;
+	self.child = [];
+	self.width = null;
+	self.height = null;
+	self.texture = image;
+	// self.texture.src = image;
 
+	self.draw = function () {
+		self.texture.onload = function () {
+			Hamster.ctx.drawImage(self.texture, self.x, self.y, self.width || self.texture.height, self.texture.height || self.texture.weight);
+		}
+		self.texture.onerror = function () {
+			console.log(self.name + "image load error");
+		}
 	}
-	this.texture.onerror = function(){
-		console.log(this.name + "image load error");
+
+	self.add = function (gameObj, _x, _y) {
+		gameObj._parent = this.gameObj.name;
 	}
-	
-	this.add = function(){
-		
-	}
-	console.warn(Hamster.ctx);
-		// Hamster.ctx.drawImage(self.texture,self.x,self.y);
-	
 };
 
-// 填加元素
-Hamster.add = function(gameObj){
+Hamster.freshList = {};
+
+Hamster.freshList.pushList = function(gameObj){
+	Hamster.spriteList.push(gameObj);
+}
+
+/**游戏的主循环 */
+Hamster.gameLoop = function () {
+	var timeInterval = setInterval(function () {
+		console.log(1);
+	}, 1 / Hamster.timeloop);
+}
+
+// 添加到
+Hamster.add = function (gameObj, x, y) {
+	var self = this;
 	console.log(gameObj);
-	gameObj.texture.onload = function(){
-		Hamster.ctx.drawImage(gameObj.texture,gameObj.x,gameObj.y);
-	}
-	
+	self.x = x || gameObj.x;
+	self.y = y || gameObj.y;
+	gameObj.x = self.x;
+	gameObj.y = self.y;
+	// console.log(Hamster.freshList.pushList);
+	Hamster.freshList.pushList(gameObj);
+	gameObj.draw();
 };
 
-;+(function(){
+; +(function () {
 	Hamster.name = "仓鼠哥";
-	Hamster.start = function(){
+	Hamster.start = function () {
 	};
 })();

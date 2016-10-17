@@ -33,16 +33,16 @@ gulp.task('es6', function () {
 		}))
 		.pipe(gulp.dest('./dist/js/'));
 });
-
+/** 整合js */
 gulp.task('concat', function () {
-	return gulp.src(['./app.js', './modules/core.js'])
+	return gulp.src(['./config.js','./app.js', './modules/core.js'])
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
-	gulp.watch(['./app.js',"./main.js","./modules/*.js"], ['es6']);
+	gulp.watch(['./config.js','./app.js',"./main.js","./modules/*.js"], ['es6']);
 
 });
 
