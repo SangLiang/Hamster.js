@@ -1,7 +1,7 @@
 var Res = {
     "images":[
-        {"background":"./public/resource/1.jpg"},
-        {"hero":"./public/resource/curry.jpg"}
+        {"href":"./public/resource/1.jpg","name":"background"},
+        {"href":"./public/resource/curry.jpg","name":"hero"}
     ]
 };
 

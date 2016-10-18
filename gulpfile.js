@@ -8,6 +8,7 @@ var uglify = require('gulp-uglify');
 // Load plugins
 var $ = require('gulp-load-plugins')();
 
+// 样式文件
 gulp.task('sass', function () {
 	return gulp.src('./public/sass/*.scss')
 		.pipe(sass())
@@ -35,14 +36,14 @@ gulp.task('es6', function () {
 });
 /** 整合js */
 gulp.task('concat', function () {
-	return gulp.src(['./config.js','./app.js', './modules/core.js'])
+	return gulp.src(['./config.js','./app.js', './modules/*.js'])
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
-	gulp.watch(['./config.js','./app.js',"./main.js","./modules/*.js"], ['es6']);
+	gulp.watch(['./config.js','./app.js',"./main.js","./modules/*.js"], ['es6',"concat"]);
 
 });
 

@@ -3,9 +3,10 @@ var Hamster = Hamster || {};
 Hamster.spriteList = [];
 Hamster.ctx = null;
 Hamster.timeloop = null;
-
+Hamster.gameWidth =null;
+Hamster.gameHeight = null;
 /**
- * 主canvas,设置canvas的值
+ * main canvas,canvas data setting
  * @id {id}
  * @width {number}
  * @height {number}
@@ -18,6 +19,10 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	Hamster.timeloop = timeloop || 60;
 	canvas.width = width;
 	canvas.height = height;
+
+	Hamster.gameWidth = width;
+	Hamster.gameHeight = height;
+
 	canvas.style.background = background || "#333";
 	canvas.style.margin = "0px auto";
 	canvas.style.display = "block";
@@ -27,7 +32,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 };
 
 /**
- * 游戏精灵
+ * Game sprite
  * @name {string}
  * @image {string}
  * @x {number}
@@ -47,6 +52,7 @@ Hamster.sprite = function (name, image, x, y) {
 	self.draw = function () {
 		self.texture.onload = function () {
 			Hamster.ctx.drawImage(self.texture, self.x, self.y, self.width || self.texture.height, self.texture.height || self.texture.weight);
+			Hamster.ctx.restore();
 		}
 		self.texture.onerror = function () {
 			console.log(self.name + "image load error");
@@ -55,6 +61,14 @@ Hamster.sprite = function (name, image, x, y) {
 
 	self.add = function (gameObj, _x, _y) {
 		gameObj._parent = this.gameObj.name;
+	}
+
+	self.setPosition = function(m,n){
+		self.x = m;
+		self.y =n;
+		Hamster.ctx.clearRect(0,0,Hamster.gameWidth,Hamster.gameHeight)
+		Hamster.ctx.drawImage(self.texture, self.x, self.y, self.width || self.texture.height, self.texture.height || self.texture.weight);
+		return self.x;
 	}
 
 	return self;
@@ -66,7 +80,7 @@ Hamster.freshList.pushList = function (gameObj) {
 	Hamster.spriteList.push(gameObj);
 }
 
-/**游戏的主循环 */
+/**main loop */
 Hamster.timeInterval = null;
 Hamster.setGameLoop = function (callback) {
 	var self = this;
@@ -84,50 +98,46 @@ Hamster.removeGameLoop = function () {
 	}
 }
 
-/**加入到场景中 */
+/**add to stage */
 Hamster.add = function (gameObj, x, y) {
 	var self = this;
-	console.log(gameObj);
 	self.x = x || gameObj.x;
 	self.y = y || gameObj.y;
 	gameObj.x = self.x;
 	gameObj.y = self.y;
 	Hamster.freshList.pushList(gameObj);
 	gameObj.draw();
-	console.log(Hamster.spriteList);
 };
 
+/*sprite animation*/
 Hamster.ani = {};
 Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
 	if (!obj || !targetX || !targetY || !moveTime) {
 		console.error("have error parm");
 		return;
 	}
-	console.log(obj);
-
 	var self = this;
-	// var distance = Math.sqrt((obj.x - targetX)(obj.x - targetX) + (obj.y - targetY)(obj.y - targetY));
-	// l = speed *time
+	
 	var _speedX = (targetX - obj.x) / moveTime;
 	var _speedY = (targetY - obj.y) / moveTime;
-	console.log(_speedX);
-	console.log(_speedY);
 
-	// obj.x = 500;
+	var _x = 0;
+	var _y = 0;
 	var tick = function () {
 		if (targetX - obj.x > 0) {
-			obj.x = obj.x+_speedX;
-			console.log(obj.x);
+			_x = obj.x+_speedX;
 		}
 		if (targetY - obj.y > 0) {
-			obj.y = obj.y+_speedY;
-			console.log(obj.y);
+			 _y = obj.y+_speedY;
 		}
 		if(targetX - obj.x <= 0 && targetY-obj.y<=0){
 			Hamster.removeGameLoop(tick);
-		}	
+		}
+		obj.setPosition(_x,_y);
+		// console.log(obj.setPosition(_x,_y));
 	}
 	Hamster.setGameLoop(tick);
+	tick();
 }
 
 ; +(function () {
