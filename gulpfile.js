@@ -47,11 +47,7 @@ gulp.task('watch', function () {
 
 });
 
-gulp.task('default', function () {
-	gulp.run('sass');
-	gulp.run('watch');
-	gulp.run('concat');
-	gulp.run('webserver');
-	gulp.run('es6');
+gulp.task('default',['sass','watch','concat','webserver','es6'], function () {
+	console.log("Server is running now");
 });
 

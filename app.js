@@ -1,10 +1,14 @@
+/**
+ * Hamster main logic
+ */
+
 var Hamster = Hamster || {};
 
 Hamster.spriteList = [];    //the list of sprites which need to be rended
-Hamster.ctx = null;
-Hamster.timeloop = null;
-Hamster.gameWidth = null;
-Hamster.gameHeight = null;
+Hamster.ctx = null;         //main canvas context
+Hamster.timeloop = null;    //main gameloop
+Hamster.gameWidth = null;   //the game stage width
+Hamster.gameHeight = null;  //the game stage height
 
 /**
  * main canvas,canvas data setting
@@ -33,6 +37,9 @@ Hamster.init = function(id, width, height, timeloop, background) {
 	Hamster.setGameLoop();
 };
 
+/**
+ * rend all sprite in the list of Hamster.spriteList
+ */
 Hamster.rendingStage = function(){
 	var self = this;
 	console.warn(Hamster.spriteList);
@@ -43,7 +50,7 @@ Hamster.rendingStage = function(){
 	}
 }
 
-// rending sprite
+/**rend single sprite that texture has been loaded */
 Hamster.rending = function(obj){
 	Hamster.ctx.drawImage(obj.texture, obj.x, obj.y, obj.width || obj.texture.height, obj.texture.height || obj.texture.weight);	
 }
@@ -66,7 +73,7 @@ Hamster.sprite = function(name, image, x, y) {
 	self.texture = new Image();
 	self.texture.src = image;
 
-	//first draw while textures loaded
+	//first draw while textures load complete
 	self.draw = function() {
 		Hamster.rending(self);
 
