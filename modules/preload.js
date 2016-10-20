@@ -1,10 +1,10 @@
 // 图片的预加载
-var Hamster = Hamster || {};
 
-Hamster.preload = {
+Hamster.Preload = {
     // 加载图片数组
     "imgList":[],
 
+    
     "init":function(){
         console.log(Res);
         for(var i = 0; i<Res["images"].length;i++){
@@ -14,4 +14,4 @@ Hamster.preload = {
     
 }
 
-Hamster.preload.init();
+Hamster.Preload.init();
