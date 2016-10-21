@@ -14,7 +14,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	self.height = height;
 	Hamster.ctx = ctx;
 	Hamster.cvs = canvas;
-	Hamster.timeloop = timeloop || 60;
+	Hamster.timeloop = timeloop*1000 || 60000;
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
@@ -124,7 +124,7 @@ Hamster.setGameLoop = function (callback) {
 		if (self.callback) {
 			self.callback();
 		}
-	}, 10 / Hamster.timeloop);
+	}, 1000 / Hamster.timeloop);
 }
 
 /**clear loop */

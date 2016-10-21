@@ -33,7 +33,11 @@ Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
 		// Hamster.rendingStage();
 	}
 	// _tick();
+	// _time = setInterval(function () {
+	// 	_tick();
+	// }, _t / Hamster.timeloop);
+
 	_time = setInterval(function () {
 		_tick();
-	}, _t / Hamster.timeloop);
+	}, 1/60);
 }
