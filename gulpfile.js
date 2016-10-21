@@ -12,7 +12,8 @@ var core_list = [
 	"./config.js",
 	"./modules/Hamster.js",
 	"./modules/Preload.js",    //资源加载
-	"./modules/Core.js"
+	"./modules/Core.js",
+	"./modules/Animation.js"
 ];
 
 // 样式文件
