@@ -13,6 +13,7 @@ var core_list = [
 	"./modules/Hamster.js",
 	"./modules/Preload.js",    //资源加载
 	"./modules/Core.js",
+	"./modules/UI.js",
 	"./modules/Animation.js"
 ];
 

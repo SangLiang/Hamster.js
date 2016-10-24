@@ -14,7 +14,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	self.height = height;
 	Hamster.ctx = ctx;
 	Hamster.cvs = canvas;
-	Hamster.timeloop = timeloop*1000 || 60000;
+	Hamster.timeloop = timeloop * 1000 || 60000;
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
@@ -29,7 +29,7 @@ Hamster.start = function () {
 	_cvs.style.margin = "0px auto";
 	_cvs.style.display = "block";
 	_cvs.style.boxShadow = "4px 4px 4px #888888";
-	Hamster.update();
+	// Hamster.update();
 }
 
 Hamster.update = function () {
@@ -55,7 +55,7 @@ Hamster.rendingStage = function () {
 
 /**rend single sprite that texture has been loaded */
 Hamster.rending = function (image, x, y, w, h) {
-	Hamster.ctx.drawImage(image, x, y);
+	Hamster.ctx.drawImage(image, x, y, w, h);
 }
 
 Hamster.getImageTexture = function (imageName) {
@@ -80,22 +80,25 @@ Hamster.getImageTexture = function (imageName) {
  * @x {number}
  * @y {number}
  */
-Hamster.sprite = function (name, imageName, x, y) {
+Hamster.sprite = function (name, imageName, x, y, w, h) {
 	var self = this;
 	self.name = "name";
 	self.x = x || 0;
 	self.y = y || 0;
+	self.width = w || null;
+	self.height = h || null;
 	self.child = [];
 	self.width = null;
 	self.height = null;
 	self.imageName = null;
-	
+	self.index = 0;
+
 	//first draw while textures load complete
 	self.draw = function () {
-		if(!self.texture){
+		if (!self.texture) {
 			self.texture = Hamster.getImageTexture(imageName);
 		}
-		Hamster.rending(self.texture, self.x, self.y);
+		Hamster.rending(self.texture, self.x, self.y, self.width || self.texture.width, self.height || self.texture.height);
 	}
 
 	self.add = function (gameObj, _x, _y) {
@@ -106,6 +109,32 @@ Hamster.sprite = function (name, imageName, x, y) {
 		self.x = m;
 		self.y = n;
 	}
+
+	// 设置缩放
+	self.scale = function (m, n) {
+		if (m < 0 || n < 0) {
+			console.error('放大的倍数不能小于0');
+		}
+		self.width = self.width * m;
+		self.height = self.height * n;
+	}
+	// 设置宽高
+	self.setSize = function (w, h) {
+		self.width = w;
+		self.height = h;
+	}
+
+	self.setWidth = function (w) {
+		self.width = w;
+	}
+	self.setHeight = function (h) {
+		self.height = h;
+	}
+	// 设置层级
+	self.setIndex = function (i) {
+		self.index = i;
+	}
+
 	return self;
 };
 

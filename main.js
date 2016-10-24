@@ -1,14 +1,22 @@
-Hamster.init("main",1200,800);
+Hamster.init("main",600,600);
 
-var sa = new Hamster.sprite('sa',"circle",0,0);
-Hamster.add(sa,0,0);
+var list = [];
 
-var hero = new Hamster.sprite('hero',"hero",100,0);
-Hamster.add(hero,100,100);
+// 入口函数
+(function init(){
+	makeSmallPic();
+	// var ui = new Hamster.UI.Button();
+	// console.log(ui);
+})();
 
-Hamster.ani.moveDirect(hero,500,500,100);
+function makeSmallPic(){
+	for (var i = 0; i<10;i++){
+		var _temp = new Hamster.sprite('sa',"circle",i*30,0);
+		_temp.setSize(30,30);
+		Hamster.add(_temp,0,0);
+		list.push(_temp);
+	}
+}
 
-// console.dir(hero.texture);
-
-
-
+// Hamster.add(hero,100,100);
+// Hamster.ani.moveDirect(hero,500,500,100);
