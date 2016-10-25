@@ -4,7 +4,14 @@ var list = [];
 
 // 入口函数
 (function init(){
+	var lala = new Hamster.UI.Button('lala','baolei',100,0,0,0);
+	console.log(lala);
+	Hamster.add(lala,0,0);
 	makeSmallPic();
+
+	// var sa = new Hamster.sprite('sa',"circle",140,0);
+
+	// Hamster.add(sa);
 	// var ui = new Hamster.UI.Button();
 	// console.log(ui);
 })();
@@ -15,8 +22,6 @@ function makeSmallPic(){
 		_temp.setSize(30,30);
 		Hamster.add(_temp,0,0);
 		list.push(_temp);
+		// console.log(_temp);
 	}
 }
-
-// Hamster.add(hero,100,100);
-// Hamster.ani.moveDirect(hero,500,500,100);

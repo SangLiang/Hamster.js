@@ -37,6 +37,23 @@ Hamster.update = function () {
 	Hamster.setGameLoop(Hamster.rendingStage);
 }
 
+function Extend(child,parent){
+	var F = function(){};
+	F.prototype = parent.prototype;
+	child.prototype = new F();
+	child.prototype.constructor = parent;
+
+	child.superclass = parent.prototype;
+
+	if(parent.prototype.constructor == Object.prototype.constructor){
+		parent.prototype.constructor = parent;
+	} 
+}
+
+Hamster.extend = function(child,parent){
+	return Extend(child,parent);
+}
+ 
 /**
  * rend all sprite in the list of Hamster.spriteList
  * 刷新在Hamster中的所有元素
@@ -74,15 +91,17 @@ Hamster.getImageTexture = function (imageName) {
 }
 
 /**
- * Game sprite
+ * class Sprite
  * @name {string}
  * @image {string}
- * @x {number}
- * @y {number}
+ * @x {number} x轴
+ * @y {number} y轴
+ * @w {number} 宽度
+ * @h {number} 高度
  */
-Hamster.sprite = function (name, imageName, x, y, w, h) {
+function Sprite(name, imageName, x, y, w, h){
 	var self = this;
-	self.name = "name";
+	self.name = name;
 	self.x = x || 0;
 	self.y = y || 0;
 	self.width = w || null;
@@ -90,52 +109,54 @@ Hamster.sprite = function (name, imageName, x, y, w, h) {
 	self.child = [];
 	self.width = null;
 	self.height = null;
-	self.imageName = null;
+	self.imageName = imageName;
 	self.index = 0;
+	self.texture = null;
+}
 
-	//first draw while textures load complete
-	self.draw = function () {
-		if (!self.texture) {
-			self.texture = Hamster.getImageTexture(imageName);
-		}
-		Hamster.rending(self.texture, self.x, self.y, self.width || self.texture.width, self.height || self.texture.height);
+Sprite.prototype.draw = function(){
+	if (!this.texture) {
+		this.texture = Hamster.getImageTexture(this.imageName);
 	}
+	Hamster.rending(this.texture, this.x, this.y, this.width || this.texture.width, this.height || this.texture.height);
+}
 
-	self.add = function (gameObj, _x, _y) {
-		gameObj._parent = this.gameObj.name;
-	}
+Sprite.prototype.add = function(gameObj, _x, _y){
+	gameObj._parent = this.gameObj.name;
+}
 
-	self.setPosition = function (m, n) {
-		self.x = m;
-		self.y = n;
-	}
+Sprite.prototype.setPosition = function(m,n){
+	this.x = m;
+	this.y = n;
+}
 
-	// 设置缩放
-	self.scale = function (m, n) {
-		if (m < 0 || n < 0) {
-			console.error('放大的倍数不能小于0');
-		}
-		self.width = self.width * m;
-		self.height = self.height * n;
+Sprite.prototype.scale = function(m,n){
+	if (m < 0 || n < 0) {
+		console.error('放大的倍数不能小于0');
 	}
-	// 设置宽高
-	self.setSize = function (w, h) {
-		self.width = w;
-		self.height = h;
-	}
+	this.width = this.width * m;
+	this.height = this.height * n;
+}
 
-	self.setWidth = function (w) {
-		self.width = w;
-	}
-	self.setHeight = function (h) {
-		self.height = h;
-	}
-	// 设置层级
-	self.setIndex = function (i) {
-		self.index = i;
-	}
+Sprite.prototype.setSize = function(w,h){
+	this.width = w;
+	this.height = h;
+}
 
-	return self;
+Sprite.prototype.setWidth = function(w){
+	this.width = w;
+}
+
+Sprite.prototype.setHeight = function(h){
+	self.height = h;
+}
+
+Sprite.prototype.setIndex = function(i){
+	this.index = i;
+}
+// 生成类的方法
+Hamster.sprite = function (name, imageName, x, y, w, h) {
+	return new Sprite(name, imageName, x, y, w, h)
 };
 
 Hamster.freshList = {};
