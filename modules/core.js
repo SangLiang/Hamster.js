@@ -37,7 +37,7 @@ Hamster.update = function () {
 	Hamster.setGameLoop(Hamster.rendingStage);
 }
 
-function Extend(child,parent){
+function _Extend(child,parent){
 	var F = function(){};
 	F.prototype = parent.prototype;
 	child.prototype = new F();
@@ -51,7 +51,7 @@ function Extend(child,parent){
 }
 
 Hamster.extend = function(child,parent){
-	return Extend(child,parent);
+	return _Extend(child,parent);
 }
  
 /**
@@ -99,7 +99,7 @@ Hamster.getImageTexture = function (imageName) {
  * @w {number} 宽度
  * @h {number} 高度
  */
-function Sprite(name, imageName, x, y, w, h){
+function _Sprite(name, imageName, x, y, w, h){
 	var self = this;
 	self.name = name;
 	self.x = x || 0;
@@ -114,23 +114,23 @@ function Sprite(name, imageName, x, y, w, h){
 	self.texture = null;
 }
 
-Sprite.prototype.draw = function(){
+_Sprite.prototype.draw = function(){
 	if (!this.texture) {
 		this.texture = Hamster.getImageTexture(this.imageName);
 	}
 	Hamster.rending(this.texture, this.x, this.y, this.width || this.texture.width, this.height || this.texture.height);
 }
 
-Sprite.prototype.add = function(gameObj, _x, _y){
+_Sprite.prototype.add = function(gameObj, _x, _y){
 	gameObj._parent = this.gameObj.name;
 }
 
-Sprite.prototype.setPosition = function(m,n){
+_Sprite.prototype.setPosition = function(m,n){
 	this.x = m;
 	this.y = n;
 }
 
-Sprite.prototype.scale = function(m,n){
+_Sprite.prototype.scale = function(m,n){
 	if (m < 0 || n < 0) {
 		console.error('放大的倍数不能小于0');
 	}
@@ -138,25 +138,25 @@ Sprite.prototype.scale = function(m,n){
 	this.height = this.height * n;
 }
 
-Sprite.prototype.setSize = function(w,h){
+_Sprite.prototype.setSize = function(w,h){
 	this.width = w;
 	this.height = h;
 }
 
-Sprite.prototype.setWidth = function(w){
+_Sprite.prototype.setWidth = function(w){
 	this.width = w;
 }
 
-Sprite.prototype.setHeight = function(h){
+_Sprite.prototype.setHeight = function(h){
 	self.height = h;
 }
 
-Sprite.prototype.setIndex = function(i){
+_Sprite.prototype.setIndex = function(i){
 	this.index = i;
 }
 // 生成类的方法
 Hamster.sprite = function (name, imageName, x, y, w, h) {
-	return new Sprite(name, imageName, x, y, w, h)
+	return new _Sprite(name, imageName, x, y, w, h);
 };
 
 Hamster.freshList = {};
