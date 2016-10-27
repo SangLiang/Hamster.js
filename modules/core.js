@@ -37,23 +37,23 @@ Hamster.update = function () {
 	Hamster.setGameLoop(Hamster.rendingStage);
 }
 
-function _Extend(child,parent){
-	var F = function(){};
+function _Extend(child, parent) {
+	var F = function () { };
 	F.prototype = parent.prototype;
 	child.prototype = new F();
 	child.prototype.constructor = parent;
 
 	child.superclass = parent.prototype;
 
-	if(parent.prototype.constructor == Object.prototype.constructor){
+	if (parent.prototype.constructor == Object.prototype.constructor) {
 		parent.prototype.constructor = parent;
-	} 
+	}
 }
 
-Hamster.extend = function(child,parent){
-	return _Extend(child,parent);
+Hamster.extend = function (child, parent) {
+	return _Extend(child, parent);
 }
- 
+
 /**
  * rend all sprite in the list of Hamster.spriteList
  * 刷新在Hamster中的所有元素
@@ -64,9 +64,19 @@ Hamster.rendingStage = function () {
 	Hamster.ctx.clearRect(0, 0, Hamster.gameWidth, Hamster.gameHeight);
 
 	if (Hamster.spriteList.length == 0) { return; }
-
+	// spriteList渲染
 	for (var i = 0; i < Hamster.spriteList.length; i++) {
-		Hamster.spriteList[i].draw();
+		if(Hamster.spriteList[i].awake){
+			Hamster.spriteList[i].draw();
+		}
+	}
+
+	// uiList渲染
+	for(var i = 0; i<Hamster.uiList.length;i++){
+		if(Hamster.uiList[i].awake){
+			Hamster.uiList[i].draw();
+		}
+		
 	}
 }
 
@@ -99,7 +109,7 @@ Hamster.getImageTexture = function (imageName) {
  * @w {number} 宽度
  * @h {number} 高度
  */
-function _Sprite(name, imageName, x, y, w, h){
+function _Sprite(name, imageName, x, y, w, h) {
 	var self = this;
 	self.layer = "Sprite";
 	self.name = name;
@@ -113,25 +123,27 @@ function _Sprite(name, imageName, x, y, w, h){
 	self.imageName = imageName;
 	self.index = 0;
 	self.texture = null;
+	self.isTrigger = false; //默认不可以点击
+	self.awake = true;  //是否在舞台上展示
 }
 
-_Sprite.prototype.draw = function(){
+_Sprite.prototype.draw = function () {
 	if (!this.texture) {
 		this.texture = Hamster.getImageTexture(this.imageName);
 	}
 	Hamster.rending(this.texture, this.x, this.y, this.width || this.texture.width, this.height || this.texture.height);
 }
 
-_Sprite.prototype.add = function(gameObj, _x, _y){
+_Sprite.prototype.add = function (gameObj, _x, _y) {
 	gameObj._parent = this.gameObj.name;
 }
 
-_Sprite.prototype.setPosition = function(m,n){
+_Sprite.prototype.setPosition = function (m, n) {
 	this.x = m;
 	this.y = n;
 }
 
-_Sprite.prototype.scale = function(m,n){
+_Sprite.prototype.scale = function (m, n) {
 	if (m < 0 || n < 0) {
 		console.error('放大的倍数不能小于0');
 	}
@@ -139,20 +151,20 @@ _Sprite.prototype.scale = function(m,n){
 	this.height = this.height * n;
 }
 
-_Sprite.prototype.setSize = function(w,h){
+_Sprite.prototype.setSize = function (w, h) {
 	this.width = w;
 	this.height = h;
 }
 
-_Sprite.prototype.setWidth = function(w){
+_Sprite.prototype.setWidth = function (w) {
 	this.width = w;
 }
 
-_Sprite.prototype.setHeight = function(h){
+_Sprite.prototype.setHeight = function (h) {
 	self.height = h;
 }
 
-_Sprite.prototype.setIndex = function(i){
+_Sprite.prototype.setIndex = function (i) {
 	this.index = i;
 }
 // 生成类的方法
@@ -163,7 +175,11 @@ Hamster.sprite = function (name, imageName, x, y, w, h) {
 Hamster.freshList = {};
 
 Hamster.freshList.pushList = function (gameObj) {
-	Hamster.spriteList.push(gameObj);
+	if (gameObj.layer == "Sprite") {
+		Hamster.spriteList.push(gameObj);
+	} else if (gameObj.layer == "UI") {
+		Hamster.uiList.push(gameObj);
+	}
 }
 
 /**main loop */

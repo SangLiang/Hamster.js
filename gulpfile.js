@@ -10,11 +10,13 @@ var $ = require('gulp-load-plugins')();
 
 var core_list = [
 	"./config.js",
+	"./modules/head.js",
 	"./modules/Hamster.js",
 	"./modules/Preload.js",    //资源加载
 	"./modules/Core.js",
 	"./modules/UI.js",
-	"./modules/Animation.js"
+	"./modules/Animation.js",
+	"./modules/foot.js"
 ];
 
 // 样式文件

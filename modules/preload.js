@@ -4,7 +4,7 @@ Hamster.Preload = {}
 // 加载图片数组
 Hamster.Preload.imageList = [];
 
-Hamster.Preload.init = function () {
+Hamster.Preload.init = (function () {
     var _visit_list = [];
     for (var i = 0; i < Res["images"].length; i++) {
 
@@ -30,6 +30,4 @@ Hamster.Preload.init = function () {
             console.info("加载完成");
         }
     }, 1);
-}
-
-Hamster.Preload.init();
+})();
