@@ -101,6 +101,7 @@ Hamster.getImageTexture = function (imageName) {
  */
 function _Sprite(name, imageName, x, y, w, h){
 	var self = this;
+	self.layer = "Sprite";
 	self.name = name;
 	self.x = x || 0;
 	self.y = y || 0;

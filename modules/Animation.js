@@ -39,5 +39,5 @@ Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
 
 	_time = setInterval(function () {
 		_tick();
-	}, 1/60);
+	}, 1 / 60);
 }

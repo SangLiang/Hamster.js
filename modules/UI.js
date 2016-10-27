@@ -6,6 +6,7 @@ Hamster.UI = {};
 function _Button(name, imageName, x, y, w, h){
 	_Sprite.call(this,name, imageName, x, y, w, h);
 	this.index = Number.MAX_VALUE;
+	this.layer = "UI";    //ui层永远位于顶层
 };
 
 Hamster.extend(_Button,_Sprite);
