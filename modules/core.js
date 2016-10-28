@@ -14,7 +14,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	self.height = height;
 	Hamster.ctx = ctx;
 	Hamster.cvs = canvas;
-	Hamster.timeloop =  (1000/60000);
+	Hamster.timeloop = (1 / 60);
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
@@ -156,6 +156,7 @@ function _Sprite(name, imageName, x, y, w, h) {
 	self.texture = null;
 	self.isTrigger = false; //默认不可以点击
 	self.awake = true;  //是否在舞台上展示
+	self.id = 0;
 }
 
 _Sprite.prototype.draw = function () {
@@ -223,7 +224,7 @@ Hamster.setGameLoop = function (callback) {
 		if (self.callback) {
 			self.callback();
 		}
-	}, 1000 / 60000);
+	}, Hamster.timeloop);
 }
 
 /**clear loop */
@@ -236,9 +237,21 @@ Hamster.removeGameLoop = function () {
 /**add to stage */
 Hamster.add = function (gameObj, x, y) {
 	var self = this;
+	gameObj.id = Hamster.spriteId;
 	self.x = x || gameObj.x;
 	self.y = y || gameObj.y;
 	gameObj.x = self.x;
 	gameObj.y = self.y;
 	Hamster.freshList.pushList(gameObj);
+	Hamster.spriteId++;
 };
+
+Hamster.remove = function(obj){
+	var self = this;
+	for(var i = 0; i<Hamster.uiList.length;i++){
+		if(obj.name==Hamster.uiList[i]["name"]){
+			Hamster.uiList.splice(i,1);
+		}
+	}
+
+}

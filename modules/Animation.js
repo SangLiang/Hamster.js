@@ -4,7 +4,7 @@
 */
 
 Hamster.ani = {};
-Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
+Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime, callback) {
 	if (!obj || !targetX || !targetY || !moveTime) {
 		console.error("have error parm");
 		return;
@@ -28,9 +28,14 @@ Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
 			if (_time) {
 				clearInterval(_time);
 			}
+			
+			if (callback && typeof callback == 'function') {
+				callback();
+			}else{
+				console.error("callback is not a function");
+			}
 		}
 		obj.setPosition(_x, _y);
-		console.log(obj.x);
 		// Hamster.rendingStage();
 	}
 	// _tick();
@@ -39,5 +44,5 @@ Hamster.ani.moveDirect = function (obj, targetX, targetY, moveTime) {
 	// }, _t / Hamster.timeloop);
 	_time = setInterval(function () {
 		_tick();
-	}, 1 / 60);
+	}, Hamster.timeloop);
 }
