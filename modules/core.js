@@ -14,7 +14,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	self.height = height;
 	Hamster.ctx = ctx;
 	Hamster.cvs = canvas;
-	Hamster.timeloop = timeloop * 1000 || 60000;
+	Hamster.timeloop =  (1000/60000);
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
@@ -29,7 +29,7 @@ Hamster.start = function () {
 	_cvs.style.margin = "0px auto";
 	_cvs.style.display = "block";
 	_cvs.style.boxShadow = "4px 4px 4px #888888";
-	// Hamster.update();
+	Hamster.update();
 }
 
 Hamster.update = function () {
@@ -54,29 +54,60 @@ Hamster.extend = function (child, parent) {
 	return _Extend(child, parent);
 }
 
+/** 
+ * spritelist和uilist 通过index来做排序渲染,数值越大的，说明渲染越靠前
+ * @param {array}  objArray
+ * @return {array}  
+ * */
+function sortListByIndex(objectArray) {
+	// console.log(objectArray);
+	var objArray = objectArray;
+	// var objArray = [].concat(objectArray);
+	// 跳出递归的条件
+	if (objArray.length <= 0) {
+		return objArray;
+	}
+
+	var pivotIndex = Math.floor(objArray.length / 2);
+	var pivotObj = objArray.splice(objArray[pivotIndex], 1)[0];
+	var pivot = pivotObj["index"];
+	var left = [];
+	var right = [];
+
+	for (var i = 0; i < objArray.length; i++) {
+		if (objArray[i]["index"] < pivot) {
+			left.push(objArray[i]);
+		} else {
+			right.push(objArray[i]);
+		}
+	}
+
+	return sortListByIndex(left).concat([pivotObj], sortListByIndex(right))
+}
+
 /**
  * rend all sprite in the list of Hamster.spriteList
  * 刷新在Hamster中的所有元素
  */
 Hamster.rendingStage = function () {
 	var self = this;
-
+	//对两个需要渲染的数组按index进行排序
+	Hamster.spriteList = sortListByIndex(Hamster.spriteList);
+	Hamster.uiList = sortListByIndex(Hamster.uiList);
 	Hamster.ctx.clearRect(0, 0, Hamster.gameWidth, Hamster.gameHeight);
 
-	if (Hamster.spriteList.length == 0) { return; }
+	if (Hamster.spriteList.length == 0 && Hamster.uiList.length == 0) { return; }
 	// spriteList渲染
 	for (var i = 0; i < Hamster.spriteList.length; i++) {
-		if(Hamster.spriteList[i].awake){
+		if (Hamster.spriteList[i].awake) {
 			Hamster.spriteList[i].draw();
 		}
 	}
-
 	// uiList渲染
-	for(var i = 0; i<Hamster.uiList.length;i++){
-		if(Hamster.uiList[i].awake){
+	for (var i = 0; i < Hamster.uiList.length; i++) {
+		if (Hamster.uiList[i].awake) {
 			Hamster.uiList[i].draw();
 		}
-		
 	}
 }
 
@@ -184,6 +215,7 @@ Hamster.freshList.pushList = function (gameObj) {
 
 /**main loop */
 Hamster.timeInterval = null;
+
 Hamster.setGameLoop = function (callback) {
 	var self = this;
 	self.callback = callback;
@@ -191,7 +223,7 @@ Hamster.setGameLoop = function (callback) {
 		if (self.callback) {
 			self.callback();
 		}
-	}, 1000 / Hamster.timeloop);
+	}, 1000 / 60000);
 }
 
 /**clear loop */

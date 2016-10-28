@@ -40,6 +40,31 @@ function sort2(array) {
 	return result;
 }
 
-var list = [8,2,4,65,2,4,7,1,9,0,2,34,12];
-var m = sort2(list);
+// 快速排序
+function quickSort(array) {
+	if (array.length <= 0) {
+		return array;
+	}
+	// 基准的inde
+	var pivotIndex = Math.floor(array.length / 2);
+	// 待排序的数组基准
+	var pivot = array.splice(pivotIndex, 1)[0];
+	console.log(pivot);
+	var left = [];
+	var right = [];
+
+	for(var i = 0; i<array.length;i++){
+		if(array[i]<pivot){
+			left.push(array[i]);
+		}else{
+			right.push(array[i]);
+		}
+	}
+
+	return quickSort(left).concat([pivot],quickSort(right))
+
+}
+
+var list = [8, 2, 4, 65, 2, 4, 7, 1, 9, 0, 2, 34, 12];
+var m = quickSort(list);
 console.log(m);
