@@ -18,10 +18,12 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
-	// 注册事件系统
-	var sys = new EventListenerSystem(canvas);
+
 };
 
+/**
+ *  Preload资源载入完成后调用start方法
+ */
 Hamster.start = function () {
 	var self = this;
 	var _cvs = Hamster.cvs;
@@ -33,6 +35,9 @@ Hamster.start = function () {
 	_cvs.style.boxShadow = "4px 4px 4px #888888";
 	_cvs.style.position = "relative";
 	Hamster.update();
+
+	// 注册事件系统
+	var sys = new EventListenerSystem(Hamster.cvs);
 }
 
 Hamster.update = function () {
@@ -97,6 +102,7 @@ Hamster.rendingStage = function () {
 	//对两个需要渲染的数组按index进行排序
 	Hamster.spriteList = sortListByIndex(Hamster.spriteList);
 	Hamster.uiList = sortListByIndex(Hamster.uiList);
+
 	Hamster.ctx.clearRect(0, 0, Hamster.gameWidth, Hamster.gameHeight);
 
 	if (Hamster.spriteList.length == 0 && Hamster.uiList.length == 0) { return; }
@@ -260,7 +266,6 @@ Hamster.remove = function (obj) {
 			Hamster.uiList.splice(i, 1);
 		}
 	}
-
 }
 
 /**
@@ -268,25 +273,37 @@ Hamster.remove = function (obj) {
  */
 function EventListenerSystem(canvas) {
 	var self = this;
-	var uiList = Hamster.uiList;
+	var spriteList = Hamster.spriteList;
 	canvas.addEventListener("click", function (e) {
-		var position = self.getEventPosition(e);
+		var position = self.getClickEventPosition(e);
 		// 事件分发
-		for (var i = 0; i < uiList.length; i++) {
-			console.log(1);
-			console.log(uiList[i]["isTrigger"]);
-			if (uiList[i]["isTrigger"]==true 
-				&& position.x <= uiList[i].x + uiList[i].width 
-				&& position.x >= uiList[i].x 
-				&& position.y >= uiList[i].y && position.y <= uiList[i].y + uiList[i].height) {
-				uiList[i].onClick();
+		for (var i = Hamster.uiList.length - 1; i >= 0; i--) {
+			if (Hamster.uiList[i]["isTrigger"] == true
+				&& position.x <= (Hamster.uiList[i].x + Hamster.uiList[i].width)
+				&& position.x >= Hamster.uiList[i].x
+				&& position.y >= Hamster.uiList[i].y
+				&& (position.y <= Hamster.uiList[i].y + Hamster.uiList[i].height)) {
+				Hamster.uiList[i].onClick();
+				return;
 			}
 		}
+		// sprite的分发
+		for (var i = Hamster.spriteList.length - 1; i >= 0; i--) {
+			if (Hamster.spriteList[i]["isTrigger"] == true
+				&& position.x <= (Hamster.spriteList[i].x + Hamster.spriteList[i].width)
+				&& position.x >= Hamster.spriteList[i].x
+				&& position.y >= Hamster.spriteList[i].y
+				&& (position.y <= Hamster.spriteList[i].y + Hamster.spriteList[i].height)) {
+				Hamster.spriteList[i].onClick();
+				return;
+			}
+		}
+
 		console.log(position.x, position.y);
 	});
 }
 
-EventListenerSystem.prototype.getEventPosition = function (ev) {
+EventListenerSystem.prototype.getClickEventPosition = function (ev) {
 	var x, y;
 	if (ev.layerX || ev.layerX == 0) {
 		x = ev.layerX;
@@ -301,6 +318,5 @@ EventListenerSystem.prototype.getEventPosition = function (ev) {
 Hamster.addEventListener = function (obj, eventName, callback) {
 	if (eventName == "click") {
 		obj.onClick = callback;
-		console.log(obj);
 	}
 }
