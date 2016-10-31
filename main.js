@@ -1,4 +1,4 @@
-Hamster.init("main", 600, 600);
+Hamster.init("main", 800, 600);
 
 var list = [];
 
