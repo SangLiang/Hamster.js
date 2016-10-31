@@ -18,6 +18,8 @@ Hamster.init = function (id, width, height, timeloop, background) {
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
+	// 注册事件系统
+	var sys = new EventListenerSystem(canvas);
 };
 
 Hamster.start = function () {
@@ -29,6 +31,7 @@ Hamster.start = function () {
 	_cvs.style.margin = "0px auto";
 	_cvs.style.display = "block";
 	_cvs.style.boxShadow = "4px 4px 4px #888888";
+	_cvs.style.position = "relative";
 	Hamster.update();
 }
 
@@ -199,6 +202,10 @@ _Sprite.prototype.setHeight = function (h) {
 _Sprite.prototype.setIndex = function (i) {
 	this.index = i;
 }
+// 点击事件
+_Sprite.onClick = function (callback) {
+	callback();
+}
 // 生成类的方法
 Hamster.sprite = function (name, imageName, x, y, w, h) {
 	return new _Sprite(name, imageName, x, y, w, h);
@@ -246,12 +253,54 @@ Hamster.add = function (gameObj, x, y) {
 	Hamster.spriteId++;
 };
 
-Hamster.remove = function(obj){
+Hamster.remove = function (obj) {
 	var self = this;
-	for(var i = 0; i<Hamster.uiList.length;i++){
-		if(obj.name==Hamster.uiList[i]["name"]){
-			Hamster.uiList.splice(i,1);
+	for (var i = 0; i < Hamster.uiList.length; i++) {
+		if (obj.name == Hamster.uiList[i]["name"]) {
+			Hamster.uiList.splice(i, 1);
 		}
 	}
 
+}
+
+/**
+ * 事件系统
+ */
+function EventListenerSystem(canvas) {
+	var self = this;
+	var uiList = Hamster.uiList;
+	canvas.addEventListener("click", function (e) {
+		var position = self.getEventPosition(e);
+		// 事件分发
+		for (var i = 0; i < uiList.length; i++) {
+			console.log(1);
+			console.log(uiList[i]["isTrigger"]);
+			if (uiList[i]["isTrigger"]==true 
+				&& position.x <= uiList[i].x + uiList[i].width 
+				&& position.x >= uiList[i].x 
+				&& position.y >= uiList[i].y && position.y <= uiList[i].y + uiList[i].height) {
+				uiList[i].onClick();
+			}
+		}
+		console.log(position.x, position.y);
+	});
+}
+
+EventListenerSystem.prototype.getEventPosition = function (ev) {
+	var x, y;
+	if (ev.layerX || ev.layerX == 0) {
+		x = ev.layerX;
+		y = ev.layerY;
+	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
+		x = ev.offsetX;
+		y = ev.offsetY;
+	}
+	return { x: x, y: y };
+}
+
+Hamster.addEventListener = function (obj, eventName, callback) {
+	if (eventName == "click") {
+		obj.onClick = callback;
+		console.log(obj);
+	}
 }

@@ -9,7 +9,6 @@ var uglify = require('gulp-uglify');
 var $ = require('gulp-load-plugins')();
 
 var core_list = [
-	"./config.js",
 	"./modules/head.js",
 	"./modules/Hamster.js",
 	"./modules/Preload.js",    //资源加载
@@ -55,7 +54,7 @@ gulp.task('concat', function () {
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
 	gulp.watch(core_list, ['es6',"concat"]);
-
+	gulp.watch("./config.js", ['es6',"concat"]);
 });
 
 gulp.task('default',['sass','watch','concat','webserver','es6'], function () {
