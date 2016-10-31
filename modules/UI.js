@@ -1,6 +1,4 @@
-/** 
- * UI模块
- */
+
 Hamster.UI = {};
 
 function _Button(name, imageName, x, y, w, h){

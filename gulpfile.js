@@ -36,9 +36,9 @@ gulp.task('webserver', function () {
 
 /* es6 */
 gulp.task('es6', function () {
-	return gulp.src(['./app.js','./modules/*.js'])
+	return gulp.src(['./modules/*.js'])
 		.pipe($.plumber())
-		.pipe(concat('app.js'))
+		// .pipe(concat('app.js'))
 		.pipe($.babel({
 			presets: ['es2015']
 		}))

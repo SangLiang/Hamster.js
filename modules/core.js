@@ -301,6 +301,10 @@ function EventListenerSystem(canvas) {
 
 		console.log(position.x, position.y);
 	});
+	// canvas.addEventListener('keydown', doKeyDown,true);
+	// window.addEventListener("keydown",function(e){
+	// 	console.log(e.key);
+	// },true);
 }
 
 EventListenerSystem.prototype.getClickEventPosition = function (ev) {
@@ -318,5 +322,9 @@ EventListenerSystem.prototype.getClickEventPosition = function (ev) {
 Hamster.addEventListener = function (obj, eventName, callback) {
 	if (eventName == "click") {
 		obj.onClick = callback;
+	}
+
+	if(eventName == "keydown"){
+		obj.onKeyDown = callback;
 	}
 }
