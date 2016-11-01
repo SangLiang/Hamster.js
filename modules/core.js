@@ -157,14 +157,14 @@ function _Sprite(name, imageName, x, y, w, h) {
 	self.y = y || 0;
 	self.width = w || null;
 	self.height = h || null;
-	self.child = [];
+	self.child = [];                //子元素
 	self.width = null;
 	self.height = null;
 	self.imageName = imageName;
 	self.index = 0;
 	self.texture = null;
-	self.isTrigger = false; //默认不可以点击
-	self.awake = true;  //是否在舞台上展示
+	self.isTrigger = false;         //默认不可以点击
+	self.awake = true;              //是否在舞台上展示
 	self.id = 0;
 }
 
@@ -172,7 +172,20 @@ _Sprite.prototype.draw = function () {
 	if (!this.texture) {
 		this.texture = Hamster.getImageTexture(this.imageName);
 	}
+	if(this.width == null){
+		this.width = this.texture.width;
+	}
+
+	if(this.height == null){
+		this.height = this.texture.height;
+	}
+
 	Hamster.rending(this.texture, this.x, this.y, this.width || this.texture.width, this.height || this.texture.height);
+}
+
+_Sprite.prototype.setTexture = function(textureName){
+	this.imageName = textureName;
+	this.texture = Hamster.getImageTexture(this.imageName);
 }
 
 _Sprite.prototype.add = function (gameObj, _x, _y) {
@@ -209,7 +222,10 @@ _Sprite.prototype.setIndex = function (i) {
 	this.index = i;
 }
 // 点击事件
-_Sprite.onClick = function (callback) {
+_Sprite.prototype.onClick = function (callback) {
+	if(!callback){
+		return;
+	}
 	callback();
 }
 // 生成类的方法
@@ -328,3 +344,4 @@ Hamster.addEventListener = function (obj, eventName, callback) {
 		obj.onKeyDown = callback;
 	}
 }
+

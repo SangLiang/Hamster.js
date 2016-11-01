@@ -38,7 +38,7 @@ gulp.task('webserver', function () {
 gulp.task('es6', function () {
 	return gulp.src(['./modules/*.js'])
 		.pipe($.plumber())
-		// .pipe(concat('app.js'))
+		.pipe(concat('app.js'))
 		.pipe($.babel({
 			presets: ['es2015']
 		}))
@@ -53,8 +53,8 @@ gulp.task('concat', function () {
 
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
-	gulp.watch(core_list, ['es6',"concat"]);
-	gulp.watch("./config.js", ['es6',"concat"]);
+	gulp.watch(core_list, ["concat",'es6']);
+	gulp.watch("./main.js",["concat",'es6']);
 });
 
 gulp.task('default',['sass','watch','concat','webserver','es6'], function () {

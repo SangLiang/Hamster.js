@@ -1,50 +1,29 @@
 Hamster.init("main", 800, 600);
 
-var list = [];
+var background = new Hamster.sprite("background","background",0,0);
+Hamster.add(background);
 
-// 入口函数
-(function init() {
-	function Back() {
-		console.log("我到达了目的地了哟");
-	}
+var myHero = new Hamster.sprite("myHero","fighter_hero",10,450);
+Hamster.add(myHero);
 
-	var lala = new Hamster.UI.Button('lala', 'baolei', 100, 150);
-	lala.setIndex(2);
-	lala.setSize(200, 250);
-	lala.isTrigger = true;
-	Hamster.addEventListener(lala, "click", function () {
-		console.log(this.name);
-	});
-	Hamster.add(lala);
-	
-	// Hamster.ani.moveDirect(lala, 400, 400, 200, function () {
-	// 	Hamster.remove(lala);
-	// });
+var enemyHero = new Hamster.sprite("enemyHero","fighter_hero",10,20);
+Hamster.add(enemyHero);
 
+// 回合结束按钮
+var turn_over_button = new Hamster.UI.Button("turn_over_button","enemy_turn_button",null,670,280);
+// turn_over_button.isTrigger = true;
+Hamster.addEventListener(turn_over_button, "click", function () {
+	console.log(this.name);
+});
+// console.log(turn_over_button.draw);
+Hamster.add(turn_over_button);
 
-	var lala2 = new Hamster.UI.Button("lala2", "baolei", 100, 150);
-	lala2.setIndex(2);
-	// Hamster.add(lala2);
+var handCard  = new Hamster.UI.Button("handCard","fishman_baby",null,180,470);
+handCard.setSize(85,120);
+Hamster.add(handCard);
 
-	var lala3 = new Hamster.UI.Button("lala3", "circle", 100, 300);
-	lala3.setIndex(2);
-	lala3.setSize(200, 200);
-	Hamster.add(lala3);
-	lala3.isTrigger = true;
-	Hamster.addEventListener(lala3, "click", function () {
-		console.log(this.name);
-		Hamster.remove(this);
-	});
-
-	// makeSmallPic();
-
-})();
-
-function makeSmallPic() {
-	for (var i = 0; i < 10; i++) {
-		var _temp = new Hamster.sprite('sa', "circle", i * 50, 0);
-		_temp.setSize(50, 50);
-		Hamster.add(_temp, 0, 0);
-		list.push(_temp);
-	}
+for(var i = 0 ; i<7;i++){
+	var _temp  = new Hamster.UI.Button("_temp","fishman_baby",null,180+80*i,470);
+	_temp.setSize(85,120);
+	Hamster.add(_temp);
 }
