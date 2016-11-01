@@ -38,7 +38,7 @@ gulp.task('webserver', function () {
 gulp.task('es6', function () {
 	return gulp.src(['./modules/*.js'])
 		.pipe($.plumber())
-		.pipe(concat('app.js'))
+		// .pipe(concat('app.js'))
 		.pipe($.babel({
 			presets: ['es2015']
 		}))
@@ -47,7 +47,7 @@ gulp.task('es6', function () {
 /** 整合js */
 gulp.task('concat', function () {
 	return gulp.src(core_list)
-		.pipe(concat('app.js'))
+		.pipe(concat('Hamster.js'))
 		.pipe(gulp.dest('./dist/js'));
 });
 
