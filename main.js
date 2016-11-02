@@ -23,6 +23,9 @@ var CARD_INFO = [
 
 ];
 
+//----------------------------
+
+// 背景
 var background = new Hamster.sprite({
 	"name": "background",
 	"imageName": "background",
@@ -31,6 +34,7 @@ var background = new Hamster.sprite({
 });
 Hamster.add(background);
 
+// 我的英雄头像
 var myHero = new Hamster.sprite({
 	"name": "myHero",
 	"imageName": "fighter_hero",
@@ -39,6 +43,43 @@ var myHero = new Hamster.sprite({
 });
 Hamster.add(myHero);
 
+var myHeroHpBackground = new Hamster.UI.Button({
+	"name": "myHeroHpBackground",
+	"imageName": "hp_background",
+	"x": 10,
+	"y": 400
+});
+Hamster.add(myHeroHpBackground);
+
+var myHeroHp = new Hamster.UI.Text({
+	"name": "myHeroHp",
+	"text": "30",
+	"fontSize": "25",
+	"color": "#fff",
+	"x": 55,
+	"y": 435
+});
+Hamster.add(myHeroHp);
+
+var enemyHeroHpBackground = new Hamster.UI.Button({
+	"name": "enemyHeroHpBackground",
+	"imageName": "hp_background",
+	"x": 10,
+	"y": 180
+});
+Hamster.add(enemyHeroHpBackground);
+
+var enemyHeroHp = new Hamster.UI.Text({
+	"name": "enemyHeroHp",
+	"text": "30",
+	"fontSize": "25",
+	"color": "#fff",
+	"x": 55,
+	"y": 215
+});
+Hamster.add(enemyHeroHp);
+
+// 敌人英雄头像
 var enemyHero = new Hamster.sprite({
 	"name": "enemyHero",
 	"imageName": "fighter_hero",
@@ -59,13 +100,6 @@ Hamster.addEventListener(turn_over_button, "click", function () {
 });
 Hamster.add(turn_over_button);
 
-var handCard = new Hamster.UI.Button({
-	"name": "handCard",
-	"imageName": "fishman_baby",
-	"x": 180,
-	"y": 470
-});
-handCard.setSize(85, 120);
 
 // 用户手牌class
 function HandCard() {
@@ -90,7 +124,6 @@ HandCard.prototype.buildHandCardList = function (num, randomRange) {
 		_temp.attack = CARD_INFO[_num]["attack"];
 		_temp.hp = CARD_INFO[_num]["hp"];
 		_temp.name = CARD_INFO[_num]["name"];
-		console.log(_temp);
 		_list.push(_temp);
 	}
 	return _list;
@@ -100,7 +133,6 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 	var _templist = handCardList.splice(1, 5);
 	for (var i = 0; i < _templist.length; i++) {
 		_templist[i].x = 180 + 80 * i;
-		Hamster.add(_templist[i]);
 
 		// 给生成出来的卡片添加点击事件
 		Hamster.addEventListener(_templist[i], "click", function () {
@@ -123,9 +155,46 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 			}
 
 		});
+		Hamster.add(_templist[i]);
 
 	}
 }
 
-var sa = new HandCard();
-// console.log(sa.m);
+function EnemyCard() {
+	this.cardList = this.buildHandCardList(15, 3);
+	console.log(this);
+
+	this.showHandCardFive(this.cardList);
+}
+Hamster.extend(EnemyCard, HandCard);
+
+EnemyCard.prototype.buildHandCardList = function (num, randomRange) {
+	var _list = [];
+	for (var i = 0; i < num; i++) {
+		var _num = Math.floor(Math.random() * randomRange);
+		var _temp = new Hamster.UI.Button({
+			"name": CARD_INFO[_num]["name"],
+			"imageName": "card_back",
+			"x": 110 + (85 * i),
+			"y": 20
+		});
+		_temp.setSize(85, 120);
+		_temp.fee = CARD_INFO[_num]["fee"];
+		_temp.attack = CARD_INFO[_num]["attack"];
+		_temp.hp = CARD_INFO[_num]["hp"];
+		_temp.name = CARD_INFO[_num]["name"];
+		_list.push(_temp);
+	}
+	return _list;
+}
+
+// 重写show方法
+EnemyCard.prototype.showHandCardFive = function (handCardList) {
+	var _templist = handCardList.splice(1, 5);
+	for (var i = 0; i < _templist.length; i++) {
+		Hamster.add(_templist[i]);
+	}
+}
+
+var myhero = new HandCard();
+var enemy = new EnemyCard();

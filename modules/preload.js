@@ -21,7 +21,7 @@ Hamster.Preload.init = (function () {
     }
     // 监听资源加载情况
     var time = setInterval(function () {
-        console.info("资源加载情况" + _visit_list.length / Res["images"].length * 100 + "%");
+        console.info("资源加载情况" + Math.floor(_visit_list.length / Res["images"].length * 100) + "%");
 
         if (_visit_list.length == Res["images"].length) {
             Hamster.start();
