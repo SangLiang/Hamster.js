@@ -7,9 +7,6 @@ function _Button(obj) {
 	this.index = 0;
 	this.layer = "UI";    			//ui层永远位于顶层
 	this.isTrigger = true; 			//默认可以点击
-	// this.draw = function(){
-	// 	console.log(1);
-	// }
 };
 
 Hamster.extend(_Button, _Sprite);

@@ -1,6 +1,6 @@
 Hamster.init("main", 800, 600);
 
-// 卡片的配置信息
+// ---卡片的配置信息
 var CARD_INFO = [
 	{
 		"name": "fishman_baby",
@@ -23,8 +23,20 @@ var CARD_INFO = [
 
 ];
 
-//----------------------------
+// ---游戏中所有用到的公共数据
+var GAME_DATA = {
+	"choiseCard": null,
 
+};
+
+/**
+ *  行动对象
+ * 	true:代表用户行动
+ *  false:代表敌人行动
+ **/
+var actionSide = true;
+
+//---游戏主逻辑
 // 背景
 var background = new Hamster.sprite({
 	"name": "background",
@@ -93,15 +105,29 @@ var turn_over_button = new Hamster.UI.Button({
 	"name": "turn_over_button",
 	"imageName": "enemy_turn_button",
 	"x": 670,
-	"y": 280
+	"y": 260
 });
 Hamster.addEventListener(turn_over_button, "click", function () {
 	console.log("lalala");
 });
 Hamster.add(turn_over_button);
 
+// 出牌按钮
+var shot_card_button = new Hamster.UI.Button({
+	"name": "shot_card_button",
+	"imageName": "shot_card",
+	"x": 20,
+	"y": 260
+});
+Hamster.add(shot_card_button);
 
-// 用户手牌class
+Hamster.addEventListener(shot_card_button, "click", function () {
+	console.log("shot_card");
+	Hamster.remove(GAME_DATA.choiseCard);
+});
+Hamster.add(turn_over_button);
+
+// ---用户手牌class
 function HandCard() {
 	this.cardList = this.buildHandCardList(15, 3);
 	this.showHandCardFive(this.cardList);
@@ -143,6 +169,8 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 					_templist[i].y = 460;
 					_templist[i].index = 0;
 				}
+				GAME_DATA.choiseCard = null;
+				GAME_DATA.choiseCard = this;
 				this.setSize(150, 180);
 				this.y = 420;
 				this.setIndex(1000);
@@ -153,13 +181,14 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 				this.y = 460;
 				this.index = 0;
 			}
-
+			console.log(GAME_DATA);
 		});
 		Hamster.add(_templist[i]);
 
 	}
 }
 
+// ---敌人手牌类
 function EnemyCard() {
 	this.cardList = this.buildHandCardList(15, 3);
 	console.log(this);
