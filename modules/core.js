@@ -148,19 +148,20 @@ Hamster.getImageTexture = function (imageName) {
  * @y {number} y轴
  * @w {number} 宽度
  * @h {number} 高度
+ * _Sprite(name, imageName, x, y, w, h) 
  */
-function _Sprite(name, imageName, x, y, w, h) {
+function _Sprite(obj) {
 	var self = this;
 	self.layer = "Sprite";
-	self.name = name;
-	self.x = x || 0;
-	self.y = y || 0;
-	self.width = w || null;
-	self.height = h || null;
+	self.name = obj.name || "no name";
+	self.x = obj.x || 0;
+	self.y = obj.y || 0;
+	self.width = obj.w || null;
+	self.height = obj.h || null;
 	self.child = [];                //子元素
 	self.width = null;
 	self.height = null;
-	self.imageName = imageName;
+	self.imageName = obj.imageName || null;
 	self.index = 0;
 	self.texture = null;
 	self.isTrigger = false;         //默认不可以点击

@@ -1,9 +1,9 @@
 
 Hamster.UI = {};
 
-function _Button(name, imageName, text, x, y, w, h) {
-	this.text = text || null;
-	_Sprite.call(this, name, imageName, x, y, w, h);
+function _Button(obj) {
+	this.text = obj.text || null;
+	_Sprite.call(this, obj);
 	this.index = 0;
 	this.layer = "UI";    			//ui层永远位于顶层
 	this.isTrigger = true; 			//默认可以点击
@@ -44,3 +44,36 @@ Hamster.UI.Button = function (name, imageName, x, y, w, h) {
 // 按钮
 
 
+// 文本类
+function _Text(obj) {
+	_Sprite.call(this, obj);
+	this.fontSize = obj.fontSize || 14;
+	this.text = obj.text || "文本";
+	this.layer = "UI";
+	this.color = obj.color;
+	this.fontFamily = obj.fontFamily || "Microsoft Yahei,serif";
+	this.index = 0;
+	this.isTrigger = false; 
+}
+
+_Text.prototype.draw = function () {
+	Hamster.ctx.fillStyle = this.color;
+	Hamster.ctx.font = this.fontSize + "px " + this.fontFamily;
+	Hamster.ctx.fillText(this.text, this.x, this.y);
+}
+
+_Text.prototype.setText = function (text) {
+	this.text = text;
+}
+
+_Text.prototype.setFontSize = function (fontSize) {
+	this.fontSize = fontSize;
+}
+
+_Text.prototype.setFontFamily = function(fontFamily){
+	this.fontFamily = fontFamily;
+}
+
+Hamster.UI.Text = function (obj) {
+	return new _Text(obj);
+}

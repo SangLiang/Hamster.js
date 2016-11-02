@@ -12,7 +12,11 @@ var Res = {
         {"href":"./public/resource/background.png","name":"background"},//背景图片
         {"href":"./public/resource/fighter_hero.png","name":"fighter_hero"},
         {"href":"./public/resource/enemy_turn_button.png","name":"enemy_turn_button"},
-        {"href":"./public/resource/fishman_baby.png","name":"fishman_baby"}
+        {"href":"./public/resource/fishman_baby.png","name":"fishman_baby"},
+        {"href":"./public/resource/freshwater_crocodile.png","name":"freshwater_crocodile"},
+        {"href":"./public/resource/ogre.png","name":"ogre"}
+        
+        
     ],
     "fonts":[],
     "sound":[]
