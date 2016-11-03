@@ -10,6 +10,7 @@ var Res = {
         { "href": "./public/resource/hp_background.png", "name": "hp_background" },
         { "href": "./public/resource/fighter_hero.png", "name": "fighter_hero" },//战士头像
         { "href": "./public/resource/enemy_turn_button.png", "name": "enemy_turn_button" },//对手回合按钮
+        { "href": "./public/resource/hero_turn_button.png", "name": "hero_turn_button" },//玩家回合
         { "href": "./public/resource/shot_card.png", "name": "shot_card" },//出牌按钮
         { "href": "./public/resource/card_back.png", "name": "card_back" },//卡背
         { "href": "./public/resource/fee.png", "name": "fee" },//水晶计数器
