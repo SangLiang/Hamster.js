@@ -7,7 +7,6 @@ Hamster.Preload.imageList = [];
 Hamster.Preload.init = (function () {
     var _visit_list = [];
     for (var i = 0; i < Res["images"].length; i++) {
-
         (function (index) {
             var obj = {};
             obj.texture = new Image();

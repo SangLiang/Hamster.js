@@ -35,15 +35,15 @@ gulp.task('webserver', function () {
 });
 
 /* es6 */
-gulp.task('es6', function () {
-	return gulp.src(['./modules/*.js'])
-		.pipe($.plumber())
-		// .pipe(concat('app.js'))
-		.pipe($.babel({
-			presets: ['es2015']
-		}))
-		.pipe(gulp.dest('./dist/js/'));
-});
+// gulp.task('es6', function () {
+// 	return gulp.src(['./modules/*.js'])
+// 		.pipe($.plumber())
+// 		// .pipe(concat('app.js'))
+// 		.pipe($.babel({
+// 			presets: ['es2015']
+// 		}))
+// 		.pipe(gulp.dest('./dist/js/'));
+// });
 /** 整合js */
 gulp.task('concat', function () {
 	return gulp.src(core_list)
@@ -53,11 +53,11 @@ gulp.task('concat', function () {
 
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
-	gulp.watch(core_list, ["concat",'es6']);
-	gulp.watch("./main.js",["concat",'es6']);
+	gulp.watch(core_list, ["concat"]);
+	gulp.watch("./main.js",["concat"]);
 });
 
-gulp.task('default',['sass','watch','concat','webserver','es6'], function () {
+gulp.task('default',['sass','watch','concat','webserver'], function () {
 	console.log("Server is running now");
 });
 

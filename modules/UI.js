@@ -40,7 +40,6 @@ Hamster.UI.Button = function (name, imageName, x, y, w, h) {
 }
 // 按钮
 
-
 // 文本类
 function _Text(obj) {
 	_Sprite.call(this, obj);
@@ -50,7 +49,7 @@ function _Text(obj) {
 	this.color = obj.color;
 	this.fontFamily = obj.fontFamily || "Microsoft Yahei,serif";
 	this.index = 0;
-	this.isTrigger = false; 
+	this.isTrigger = false;
 }
 
 _Text.prototype.draw = function () {
@@ -67,7 +66,7 @@ _Text.prototype.setFontSize = function (fontSize) {
 	this.fontSize = fontSize;
 }
 
-_Text.prototype.setFontFamily = function(fontFamily){
+_Text.prototype.setFontFamily = function (fontFamily) {
 	this.fontFamily = fontFamily;
 }
 

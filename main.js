@@ -26,7 +26,10 @@ var CARD_INFO = [
 // ---游戏中所有用到的公共数据
 var GAME_DATA = {
 	"choiseCard": null,
-
+	"heroHandCardList": [],//玩家手牌列表
+	"heroFightFieldList": [],//玩家战斗角色列表
+	"enemyHandCardList": [], // 敌人手牌列表
+	"enemyFightFieldList": []//敌人战斗角色列表
 };
 
 /**
@@ -112,6 +115,26 @@ Hamster.addEventListener(turn_over_button, "click", function () {
 });
 Hamster.add(turn_over_button);
 
+// 玩家计费器
+var heroFeeCount = new Hamster.UI.Button({
+	"name": "heroFeeCount",
+	"imageName": "fee",
+	"x": 650,
+	"y": 350
+});
+Hamster.add(heroFeeCount);
+
+// 敌人计费器
+var enemyFeeCount = new Hamster.UI.Button({
+	"name": "enemyFeeCount",
+	"imageName": "fee",
+	"x": 650,
+	"y": 200
+});
+Hamster.add(enemyFeeCount);
+
+var hf = new HeroFighter();
+
 // 出牌按钮
 var shot_card_button = new Hamster.UI.Button({
 	"name": "shot_card_button",
@@ -122,12 +145,21 @@ var shot_card_button = new Hamster.UI.Button({
 Hamster.add(shot_card_button);
 
 Hamster.addEventListener(shot_card_button, "click", function () {
-	console.log("shot_card");
-	Hamster.remove(GAME_DATA.choiseCard);
+	if (!GAME_DATA.choiseCard) {
+		return;
+	}
+	if (GAME_DATA.choiseCard.status == "click") {
+		GAME_DATA.heroFightFieldList.push(hf.buildFighter(GAME_DATA.choiseCard));
+		hf.showHeroFighter();
+		Hamster.remove(GAME_DATA.choiseCard);
+		GAME_DATA.choiseCard = null;
+	}
 });
 Hamster.add(turn_over_button);
 
-// ---用户手牌class
+/**
+ * 用户手牌class
+ */
 function HandCard() {
 	this.cardList = this.buildHandCardList(15, 3);
 	this.showHandCardFive(this.cardList);
@@ -154,9 +186,10 @@ HandCard.prototype.buildHandCardList = function (num, randomRange) {
 	}
 	return _list;
 }
-// 展示手上的五张卡牌
+// 展示手上的4张卡牌
 HandCard.prototype.showHandCardFive = function (handCardList) {
-	var _templist = handCardList.splice(1, 5);
+	var _templist = handCardList.splice(1, 4);
+	GAME_DATA.heroHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
 		_templist[i].x = 180 + 80 * i;
 
@@ -188,11 +221,11 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 	}
 }
 
-// ---敌人手牌类
+/**
+ * ---敌人手牌类
+ */
 function EnemyCard() {
 	this.cardList = this.buildHandCardList(15, 3);
-	console.log(this);
-
 	this.showHandCardFive(this.cardList);
 }
 Hamster.extend(EnemyCard, HandCard);
@@ -219,9 +252,64 @@ EnemyCard.prototype.buildHandCardList = function (num, randomRange) {
 
 // 重写show方法
 EnemyCard.prototype.showHandCardFive = function (handCardList) {
-	var _templist = handCardList.splice(1, 5);
+	var _templist = handCardList.splice(1, 4);
 	for (var i = 0; i < _templist.length; i++) {
+
 		Hamster.add(_templist[i]);
+	}
+}
+
+/**
+ * 玩家战斗角色类
+ */
+function HeroFighter() {
+
+}
+HeroFighter.prototype.buildFighter = function (obj) {
+	if (!obj) {
+		return;
+	}
+	var _temp = new Hamster.UI.Button({
+		"name": obj.name + "_fighter",
+		"imageName": obj.imageName + "_fight",
+		"x": 0,
+		"y": 300
+	});
+	_temp.fee = obj.fee;
+	_temp.attack = obj.attack;
+	_temp.hp = obj.hp;
+
+	return _temp;
+}
+
+HeroFighter.prototype.showHeroFighter = function () {
+	for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+		GAME_DATA.heroFightFieldList[i].x = 180 + i * 85;
+		Hamster.add(GAME_DATA.heroFightFieldList[i]);
+		var fighterAttack = new Hamster.UI.Text({
+			"name": GAME_DATA.heroFightFieldList[i].name + "_attack",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.heroFightFieldList[i].attack,
+			"x": GAME_DATA.heroFightFieldList[i].x + 10,
+			"y": GAME_DATA.heroFightFieldList[i].y + 110
+		});
+		var fighterHp = new Hamster.UI.Text({
+			"name": GAME_DATA.heroFightFieldList[i].name + "_hp",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.heroFightFieldList[i].attack,
+			"x": GAME_DATA.heroFightFieldList[i].x + 66,
+			"y": GAME_DATA.heroFightFieldList[i].y + 110
+		});
+
+		Hamster.addEventListener(GAME_DATA.heroFightFieldList[i], "click", function () {
+			Hamster.cvs.style.cursor = "url(./public/resource/attack_icon.png),auto";
+			console.log(this);
+		});
+
+		Hamster.add(fighterAttack);
+		Hamster.add(fighterHp);
 	}
 }
 
