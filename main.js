@@ -132,7 +132,6 @@ EnemyCard.prototype.addCard = function() {
 	_temp.x = 180 + (GAME_DATA.enemyHandCardList.length) * 85;
 	GAME_DATA.enemyHandCardList.push(_temp);
 	Hamster.add(_temp);
-	console.log(GAME_DATA.enemyHandCardList);
 }
 
 /**
@@ -169,85 +168,67 @@ HeroFighter.prototype.buildFighter = function(obj) {
 HeroFighter.prototype.showHeroFighter = function() {
 	var self = this;
 	if (this.side == "enemy") {
-		if (GAME_DATA.enemyFightFieldList.length > 0) {
-			for (var j = 0; j < GAME_DATA.enemyFightFieldList.length; j++) {
-				Hamster.remove(GAME_DATA.enemyFightFieldList[j]);
-				if (GAME_DATA.enemyFightFieldList[j].fighterAttack !=undefined) {
-					Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterAttack);
-					Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterHp);
-				}
+		
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y = 180;
+		// setTexture会直接切换图片
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].setTexture(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_fight");
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x = 180 + (GAME_DATA.enemyFightFieldList.length - 1) * 85;
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack = new Hamster.UI.Text({
+			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_attack",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].attack,
+			"x": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x + 10,
+			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
+		});
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp = new Hamster.UI.Text({
+			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_hp",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].hp,
+			"x": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x + 66,
+			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
+		});
 
+		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
+
+			GAME_DATA.fight_enemyChoise = this;
+			alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
+
+			var nenmyResult = null;
+			var heroResult = null;
+
+			nenmyResult = GAME_DATA.fight_enemyChoise.hp - GAME_DATA.fight_heroChoise.attack;
+			heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
+
+			if (nenmyResult <= 0) {
+				alert("敌人死翘翘了");
+				Hamster.remove(GAME_DATA.fight_enemyChoise);
+				for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+					if (GAME_DATA.enemyFightFieldList[i].id == GAME_DATA.fight_enemyChoise.id) {
+						GAME_DATA.enemyFightFieldList.splice(i, 1);
+					}
+				}
+				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterAttack);
+				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterHp);
 			}
-		}
 
-		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
-			GAME_DATA.enemyFightFieldList[i].y = 180;
-			GAME_DATA.enemyFightFieldList[i].setTexture(GAME_DATA.enemyFightFieldList[i].name + "_fight");
-			GAME_DATA.enemyFightFieldList[i].x = 180 + i * 85;
-			Hamster.add(GAME_DATA.enemyFightFieldList[i]);
-			GAME_DATA.enemyFightFieldList[i].fighterAttack = new Hamster.UI.Text({
-				"name": GAME_DATA.enemyFightFieldList[i].name + "_attack",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.enemyFightFieldList[i].attack,
-				"x": GAME_DATA.enemyFightFieldList[i].x + 10,
-				"y": GAME_DATA.enemyFightFieldList[i].y + 110
-			});
-			GAME_DATA.enemyFightFieldList[i].fighterHp = new Hamster.UI.Text({
-				"name": GAME_DATA.enemyFightFieldList[i].name + "_hp",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.enemyFightFieldList[i].hp,
-				"x": GAME_DATA.enemyFightFieldList[i].x + 66,
-				"y": GAME_DATA.enemyFightFieldList[i].y + 110
-			});
-
-			Hamster.addEventListener(GAME_DATA.enemyFightFieldList[i], "click", function() {
-				GAME_DATA.fight_enemyChoise = this;
-				alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
-
-				var nenmyResult = null;
-				var heroResult = null;
-
-				nenmyResult = GAME_DATA.fight_enemyChoise.hp - GAME_DATA.fight_heroChoise.attack;
-				heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
-
-				if (nenmyResult <= 0) {
-					alert("敌人死翘翘了");
-					for (var j = 0; j < GAME_DATA.enemyFightFieldList.length; j++) {
-						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterAttack);
-						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterHp);
+			if (heroResult <= 0) {
+				alert("我的随从也嗝屁了");
+				Hamster.remove(GAME_DATA.fight_heroChoise);
+				for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+					if (GAME_DATA.heroFightFieldList[i].id == GAME_DATA.fight_heroChoise.id) {
+						GAME_DATA.heroFightFieldList.splice(i, 1);
 					}
-					ai.enemyFighter.showHeroFighter();
-					Hamster.remove(GAME_DATA.fight_enemyChoise);
-
-					for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
-						if (GAME_DATA.enemyFightFieldList[i].id == GAME_DATA.fight_enemyChoise.id) {
-							GAME_DATA.enemyFightFieldList.splice(i, 1);
-						}
-					}
-
-					Hamster.remove(GAME_DATA.fight_enemyChoise.fighterAttack);
-					Hamster.remove(GAME_DATA.fight_enemyChoise.fighterHp);
 				}
+				Hamster.remove(GAME_DATA.fight_heroChoise.fighterAttack);
+				Hamster.remove(GAME_DATA.fight_heroChoise.fighterHp);
+			}
+			Hamster.cvs.style.cursor = "default";
+		});
 
-				if (heroResult <= 0) {
-					alert("我的随从也嗝屁了");
-					Hamster.remove(GAME_DATA.fight_heroChoise);
-					for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
-						if (GAME_DATA.heroFightFieldList[i].id == GAME_DATA.fight_heroChoise.id) {
-							GAME_DATA.heroFightFieldList.splice(i, 1);
-						}
-					}
-					Hamster.remove(GAME_DATA.fight_heroChoise.fighterAttack);
-					Hamster.remove(GAME_DATA.fight_heroChoise.fighterHp);
-				}
-				Hamster.cvs.style.cursor = "default";
-			});
-
-			Hamster.add(GAME_DATA.enemyFightFieldList[i].fighterAttack);
-			Hamster.add(GAME_DATA.enemyFightFieldList[i].fighterHp);
-		}
+		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack);
+		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp);
 
 	} else if (this.side == "hero") {
 		// 玩家的战场随从事件
@@ -380,8 +361,9 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 				enemy.refresh("enemy");
 				actionSide = true;
 				turn_over_button.setTexture("hero_turn_button");
+
 				self.enemyFighter.showHeroFighter();
-				
+
 				// 改变角色状态
 				hf.changeAction();
 
@@ -584,7 +566,3 @@ Hamster.addEventListener(shot_card_button, "click", function() {
 	}
 });
 Hamster.add(turn_over_button);
-
-// setTimeout(function(){
-// 	heroFee.setCurrentFee(10);
-// },1000);
