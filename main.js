@@ -16,35 +16,35 @@ function HandCard() {
 }
 
 // 生成所有的卡组，暂定15张
-HandCard.prototype.buildHandCardList = function (num, randomRange) {
-	var _list = [];
-	for (var i = 0; i < num; i++) {
-		var _num = Math.floor(Math.random() * randomRange);
-		var _temp = new Hamster.UI.Button({
-			"name": "_temp",
-			"imageName": CARD_INFO[_num]["name"],
-			"x": 180 + 80 * i,
-			"y": 460
-		});
-		_temp.setSize(85, 120);
-		_temp.status = "normal"; //卡牌的状态
-		_temp.fee = CARD_INFO[_num]["fee"];
-		_temp.attack = CARD_INFO[_num]["attack"];
-		_temp.hp = CARD_INFO[_num]["hp"];
-		_temp.name = CARD_INFO[_num]["name"];
-		_list.push(_temp);
+HandCard.prototype.buildHandCardList = function(num, randomRange) {
+		var _list = [];
+		for (var i = 0; i < num; i++) {
+			var _num = Math.floor(Math.random() * randomRange);
+			var _temp = new Hamster.UI.Button({
+				"name": "_temp",
+				"imageName": CARD_INFO[_num]["name"],
+				"x": 180 + 80 * i,
+				"y": 460
+			});
+			_temp.setSize(85, 120);
+			_temp.status = "normal"; //卡牌的状态
+			_temp.fee = CARD_INFO[_num]["fee"];
+			_temp.attack = CARD_INFO[_num]["attack"];
+			_temp.hp = CARD_INFO[_num]["hp"];
+			_temp.name = CARD_INFO[_num]["name"];
+			_list.push(_temp);
+		}
+		return _list;
 	}
-	return _list;
-}
-// 展示手上的4张卡牌
-HandCard.prototype.showHandCardFive = function (handCardList) {
+	// 展示手上的4张卡牌
+HandCard.prototype.showHandCardFive = function(handCardList) {
 	var _templist = handCardList.splice(1, 4);
 	GAME_DATA.heroHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
 		_templist[i].x = 180 + 80 * i;
 
 		// 给生成出来的卡片添加点击事件
-		Hamster.addEventListener(_templist[i], "click", function () {
+		Hamster.addEventListener(_templist[i], "click", function() {
 			if (this.status == "normal") {
 				for (var i = 0; i < _templist.length; i++) {
 					_templist[i].status = "normal";
@@ -70,7 +70,7 @@ HandCard.prototype.showHandCardFive = function (handCardList) {
 	}
 }
 
-HandCard.prototype.refresh = function (side) {
+HandCard.prototype.refresh = function(side) {
 	if (side == "hero") {
 		var temp = GAME_DATA.heroHandCardList;
 		var _distant = 80;
@@ -85,7 +85,7 @@ HandCard.prototype.refresh = function (side) {
 }
 
 // 补牌
-HandCard.prototype.addCard = function () {
+HandCard.prototype.addCard = function() {
 	GAME_DATA.heroHandCardList.push(this.cardList.splice(1, 1));
 }
 
@@ -98,7 +98,7 @@ function EnemyCard() {
 }
 Hamster.extend(EnemyCard, HandCard);
 
-EnemyCard.prototype.buildHandCardList = function (num, randomRange) {
+EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 	var _list = [];
 	for (var i = 0; i < num; i++) {
 		var _num = Math.floor(Math.random() * randomRange);
@@ -119,7 +119,7 @@ EnemyCard.prototype.buildHandCardList = function (num, randomRange) {
 }
 
 // 重写show方法
-EnemyCard.prototype.showHandCardFive = function (handCardList) {
+EnemyCard.prototype.showHandCardFive = function(handCardList) {
 	var _templist = handCardList.splice(1, 4);
 	GAME_DATA.enemyHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
@@ -127,12 +127,11 @@ EnemyCard.prototype.showHandCardFive = function (handCardList) {
 	}
 }
 
-EnemyCard.prototype.addCard = function () {
+EnemyCard.prototype.addCard = function() {
 	var _temp = this.cardList.splice(1, 1)[0];
 	_temp.x = 180 + (GAME_DATA.enemyHandCardList.length) * 85;
 	GAME_DATA.enemyHandCardList.push(_temp);
 	Hamster.add(_temp);
-	console.log(GAME_DATA.enemyHandCardList);
 }
 
 /**
@@ -147,7 +146,7 @@ function HeroFighter(side) {
  * @obj 
  * @side {string} "hero":本方角色  "enemy":敌方角色
  */
-HeroFighter.prototype.buildFighter = function (obj) {
+HeroFighter.prototype.buildFighter = function(obj) {
 	if (!obj) {
 		return;
 	}
@@ -166,41 +165,70 @@ HeroFighter.prototype.buildFighter = function (obj) {
 }
 
 // 展示战斗角色
-HeroFighter.prototype.showHeroFighter = function () {
+HeroFighter.prototype.showHeroFighter = function() {
 	var self = this;
 	if (this.side == "enemy") {
-		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
-			GAME_DATA.enemyFightFieldList[i].y = 180;
-			GAME_DATA.enemyFightFieldList[i].setTexture(GAME_DATA.enemyFightFieldList[i].name + "_fight");
-			GAME_DATA.enemyFightFieldList[i].x = 180 + i * 85;
-			Hamster.add(GAME_DATA.enemyFightFieldList[i]);
-			GAME_DATA.enemyFightFieldList[i].fighterAttack = new Hamster.UI.Text({
-				"name": GAME_DATA.enemyFightFieldList[i].name + "_attack",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.enemyFightFieldList[i].attack,
-				"x": GAME_DATA.enemyFightFieldList[i].x + 10,
-				"y": GAME_DATA.enemyFightFieldList[i].y + 110
-			});
-			GAME_DATA.enemyFightFieldList[i].fighterHp = new Hamster.UI.Text({
-				"name": GAME_DATA.enemyFightFieldList[i].name + "_hp",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.enemyFightFieldList[i].attack,
-				"x": GAME_DATA.enemyFightFieldList[i].x + 66,
-				"y": GAME_DATA.enemyFightFieldList[i].y + 110
-			});
+		
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y = 180;
+		// setTexture会直接切换图片
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].setTexture(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_fight");
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x = 180 + (GAME_DATA.enemyFightFieldList.length - 1) * 85;
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack = new Hamster.UI.Text({
+			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_attack",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].attack,
+			"x": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x + 10,
+			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
+		});
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp = new Hamster.UI.Text({
+			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_hp",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].hp,
+			"x": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x + 66,
+			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
+		});
 
-			Hamster.addEventListener(GAME_DATA.enemyFightFieldList[i], "click", function () {
-				GAME_DATA.fight_enemyChoise = this;
-				self.getFightResult();
-				Hamster.cvs.style.cursor = "default";
-				console.log(GAME_DATA.fight_enemyChoise);
-			});
+		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
 
-			Hamster.add(GAME_DATA.enemyFightFieldList[i].fighterAttack);
-			Hamster.add(GAME_DATA.enemyFightFieldList[i].fighterHp);
-		}
+			GAME_DATA.fight_enemyChoise = this;
+			alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
+
+			var nenmyResult = null;
+			var heroResult = null;
+
+			nenmyResult = GAME_DATA.fight_enemyChoise.hp - GAME_DATA.fight_heroChoise.attack;
+			heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
+
+			if (nenmyResult <= 0) {
+				alert("敌人死翘翘了");
+				Hamster.remove(GAME_DATA.fight_enemyChoise);
+				for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+					if (GAME_DATA.enemyFightFieldList[i].id == GAME_DATA.fight_enemyChoise.id) {
+						GAME_DATA.enemyFightFieldList.splice(i, 1);
+					}
+				}
+				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterAttack);
+				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterHp);
+			}
+
+			if (heroResult <= 0) {
+				alert("我的随从也嗝屁了");
+				Hamster.remove(GAME_DATA.fight_heroChoise);
+				for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+					if (GAME_DATA.heroFightFieldList[i].id == GAME_DATA.fight_heroChoise.id) {
+						GAME_DATA.heroFightFieldList.splice(i, 1);
+					}
+				}
+				Hamster.remove(GAME_DATA.fight_heroChoise.fighterAttack);
+				Hamster.remove(GAME_DATA.fight_heroChoise.fighterHp);
+			}
+			Hamster.cvs.style.cursor = "default";
+		});
+
+		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack);
+		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp);
 
 	} else if (this.side == "hero") {
 		// 玩家的战场随从事件
@@ -220,12 +248,12 @@ HeroFighter.prototype.showHeroFighter = function () {
 				"name": GAME_DATA.heroFightFieldList[i].name + "_hp",
 				"fontSize": 18,
 				"color": "#fff",
-				"text": GAME_DATA.heroFightFieldList[i].attack,
+				"text": GAME_DATA.heroFightFieldList[i].hp,
 				"x": GAME_DATA.heroFightFieldList[i].x + 66,
 				"y": GAME_DATA.heroFightFieldList[i].y + 110
 			});
 
-			Hamster.addEventListener(GAME_DATA.heroFightFieldList[i], "click", function () {
+			Hamster.addEventListener(GAME_DATA.heroFightFieldList[i], "click", function() {
 				if (this.action == 0) {
 					alert("你目前不能操作该随从！");
 					return;
@@ -244,7 +272,7 @@ HeroFighter.prototype.showHeroFighter = function () {
 }
 
 // 改变战场角色,将睡眠角色转换为攻击状态
-HeroFighter.prototype.changeAction = function () {
+HeroFighter.prototype.changeAction = function() {
 	for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
 		if (GAME_DATA.heroFightFieldList[i].action == 0) {
 			GAME_DATA.heroFightFieldList[i].action = 1;
@@ -252,33 +280,10 @@ HeroFighter.prototype.changeAction = function () {
 	}
 }
 
+
 // 战斗结算
-HeroFighter.prototype.getFightResult = function () {
-	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
+HeroFighter.prototype.getFightResult = function() {
 
-	var nenmyResult = null;
-	var heroResult = null;
-
-	nenmyResult = GAME_DATA.fight_enemyChoise.hp - GAME_DATA.fight_heroChoise.attack;
-	heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
-
-	if (nenmyResult <= 0) {
-		alert("敌人死翘翘了");
-		Hamster.remove(GAME_DATA.fight_enemyChoise);
-	}
-
-	if (heroResult <= 0) {
-		alert("我的随从也嗝屁了");
-		Hamster.remove(GAME_DATA.fight_heroChoise);
-		for(var i = 0; i<GAME_DATA.heroFightFieldList.length;i++){
-			if(GAME_DATA.heroFightFieldList[i].id == GAME_DATA.fight_heroChoise.id){
-				GAME_DATA.heroFightFieldList.splice(i,1);
-			}
-		}
-		console.log(GAME_DATA.fight_heroChoise);
-		Hamster.remove(GAME_DATA.fight_heroChoise.fighterAttack);
-		Hamster.remove(GAME_DATA.fight_heroChoise.fighterHp);
-	}
 }
 
 /**
@@ -294,7 +299,7 @@ function FeeManager(currentFee, round, x, y) {
 	this.init();
 }
 
-FeeManager.prototype.init = function () {
+FeeManager.prototype.init = function() {
 	// 玩家计费器
 	this.feeCount = new Hamster.UI.Button({
 		"name": "FeeCount",
@@ -314,22 +319,22 @@ FeeManager.prototype.init = function () {
 	Hamster.add(this.currentFeeText);
 }
 
-FeeManager.prototype.setCurrentFee = function (currentFee) {
+FeeManager.prototype.setCurrentFee = function(currentFee) {
 	this.currentFee = currentFee;
 	this.reFreshText();
 }
 
-FeeManager.prototype.setRound = function (round) {
+FeeManager.prototype.setRound = function(round) {
 	this.round = round;
 	this.reFreshText();
 }
 
-FeeManager.prototype.reFreshText = function () {
+FeeManager.prototype.reFreshText = function() {
 	this.currentFeeText.setText(this.currentFee + "/" + this.round);
 }
 
 // 进入下一轮
-FeeManager.prototype.addTurn = function () {
+FeeManager.prototype.addTurn = function() {
 	this.round++;
 	this.currentFee = this.round;
 	this.reFreshText();
@@ -343,20 +348,21 @@ function EnemyAIController() {
 }
 
 // 出牌
-EnemyAIController.prototype.shotCard = function (enemy) {
+EnemyAIController.prototype.shotCard = function(enemy) {
 	var self = this;
 	enemy.addCard();
-	setTimeout(function () {
-		// 遍历所有的
+	setTimeout(function() {
+		// 选择合适的卡
 		for (var i = 0; i < GAME_DATA.enemyHandCardList.length; i++) {
 			if (GAME_DATA.enemyHandCardList[i].fee <= enemyFee.currentFee) {
 				GAME_DATA.enemyFightFieldList.push(GAME_DATA.enemyHandCardList[i]);
 				self.enemyFighter.buildFighter(GAME_DATA.enemyHandCardList[i]);
-				self.enemyFighter.showHeroFighter();
 				GAME_DATA.enemyHandCardList.splice(i, 1);
 				enemy.refresh("enemy");
 				actionSide = true;
 				turn_over_button.setTexture("hero_turn_button");
+
+				self.enemyFighter.showHeroFighter();
 
 				// 改变角色状态
 				hf.changeAction();
@@ -378,7 +384,7 @@ EnemyAIController.prototype.shotCard = function (enemy) {
 }
 
 // 电脑Ai角色开始发动进攻
-EnemyAIController.prototype.attack = function () {
+EnemyAIController.prototype.attack = function() {
 
 }
 
@@ -507,7 +513,7 @@ var turn_over_button = new Hamster.UI.Button({
 	"x": 670,
 	"y": 260
 });
-Hamster.addEventListener(turn_over_button, "click", function () {
+Hamster.addEventListener(turn_over_button, "click", function() {
 	if (actionSide) {
 		this.setTexture("enemy_turn_button");
 	} else {
@@ -515,7 +521,7 @@ Hamster.addEventListener(turn_over_button, "click", function () {
 	}
 	actionSide = !actionSide;
 	// 电脑在思考哦
-	setTimeout(function () {
+	setTimeout(function() {
 		ai.shotCard(enemy);
 	}, 500);
 });
@@ -531,7 +537,7 @@ var shot_card_button = new Hamster.UI.Button({
 });
 Hamster.add(shot_card_button);
 
-Hamster.addEventListener(shot_card_button, "click", function () {
+Hamster.addEventListener(shot_card_button, "click", function() {
 	if (!GAME_DATA.choiseCard) {
 		return;
 	}
@@ -560,7 +566,3 @@ Hamster.addEventListener(shot_card_button, "click", function () {
 	}
 });
 Hamster.add(turn_over_button);
-
-// setTimeout(function(){
-// 	heroFee.setCurrentFee(10);
-// },1000);
