@@ -136,6 +136,7 @@ EnemyCard.prototype.addCard = function() {
 
 /**
  * 玩家战斗角色类
+ * @param side {string} "hero":本方角色  "enemy":敌方角色
  */
 function HeroFighter(side) {
 	this.side = side;
@@ -143,8 +144,7 @@ function HeroFighter(side) {
 
 /**
  * 生成战斗角色
- * @obj 
- * @side {string} "hero":本方角色  "enemy":敌方角色
+ * @param obj  
  */
 HeroFighter.prototype.buildFighter = function(obj) {
 	if (!obj) {
@@ -190,14 +190,17 @@ HeroFighter.prototype.showHeroFighter = function() {
 			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
 		});
 
+		//战斗事件
 		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
 
 			GAME_DATA.fight_enemyChoise = this;
+			console.warn(this);
 			alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
 
 			var nenmyResult = null;
 			var heroResult = null;
 
+			//战斗后剩余的血量
 			nenmyResult = GAME_DATA.fight_enemyChoise.hp - GAME_DATA.fight_heroChoise.attack;
 			heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
 
@@ -211,6 +214,9 @@ HeroFighter.prototype.showHeroFighter = function() {
 				}
 				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterAttack);
 				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterHp);
+			}else{
+				this.hp = nenmyResult;
+				this.fighterHp.setText(nenmyResult);
 			}
 
 			if (heroResult <= 0) {
@@ -279,7 +285,6 @@ HeroFighter.prototype.changeAction = function() {
 		}
 	}
 }
-
 
 // 战斗结算
 HeroFighter.prototype.getFightResult = function() {
@@ -516,6 +521,7 @@ var turn_over_button = new Hamster.UI.Button({
 Hamster.addEventListener(turn_over_button, "click", function() {
 	if (actionSide) {
 		this.setTexture("enemy_turn_button");
+		Hamster.cvs.style.cursor = "default";
 	} else {
 		return;
 	}
