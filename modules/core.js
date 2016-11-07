@@ -1,4 +1,3 @@
-
 /**
  * main canvas,canvas data setting
  * @id {id}
@@ -6,7 +5,7 @@
  * @height {number}
  * @background {css color}
  */
-Hamster.init = function (id, width, height, timeloop, background) {
+Hamster.init = function(id, width, height, timeloop, background) {
 	var canvas = document.getElementById(id);
 	var ctx = canvas.getContext('2d');
 	var self = this;
@@ -24,7 +23,7 @@ Hamster.init = function (id, width, height, timeloop, background) {
 /**
  *  Preload资源载入完成后调用start方法
  */
-Hamster.start = function () {
+Hamster.start = function() {
 	var self = this;
 	var _cvs = Hamster.cvs;
 	_cvs.width = Hamster.gameWidth;
@@ -40,13 +39,13 @@ Hamster.start = function () {
 	var sys = new EventListenerSystem(Hamster.cvs);
 }
 
-Hamster.update = function () {
+Hamster.update = function() {
 	// 开启游戏主循环
 	Hamster.setGameLoop(Hamster.rendingStage);
 }
 
 function _Extend(child, parent) {
-	var F = function () { };
+	var F = function() {};
 	F.prototype = parent.prototype;
 	child.prototype = new F();
 	child.prototype.constructor = parent;
@@ -58,7 +57,7 @@ function _Extend(child, parent) {
 	}
 }
 
-Hamster.extend = function (child, parent) {
+Hamster.extend = function(child, parent) {
 	return _Extend(child, parent);
 }
 
@@ -97,7 +96,7 @@ function sortListByIndex(objectArray) {
  * rend all sprite in the list of Hamster.spriteList
  * 刷新在Hamster中的所有元素
  */
-Hamster.rendingStage = function () {
+Hamster.rendingStage = function() {
 	var self = this;
 	//对两个需要渲染的数组按index进行排序
 	Hamster.spriteList = sortListByIndex(Hamster.spriteList);
@@ -105,7 +104,9 @@ Hamster.rendingStage = function () {
 
 	Hamster.ctx.clearRect(0, 0, Hamster.gameWidth, Hamster.gameHeight);
 
-	if (Hamster.spriteList.length == 0 && Hamster.uiList.length == 0) { return; }
+	if (Hamster.spriteList.length == 0 && Hamster.uiList.length == 0) {
+		return;
+	}
 	// spriteList渲染
 	for (var i = 0; i < Hamster.spriteList.length; i++) {
 		if (Hamster.spriteList[i].awake) {
@@ -121,11 +122,11 @@ Hamster.rendingStage = function () {
 }
 
 /**rend single sprite that texture has been loaded */
-Hamster.rending = function (image, x, y, w, h) {
+Hamster.rending = function(image, x, y, w, h) {
 	Hamster.ctx.drawImage(image, x, y, w, h);
 }
 
-Hamster.getImageTexture = function (imageName) {
+Hamster.getImageTexture = function(imageName) {
 	var texture = null;
 	for (var i = 0; i < Hamster.Preload.imageList.length; i++) {
 		if (imageName == Hamster.Preload.imageList[i].name) {
@@ -158,47 +159,47 @@ function _Sprite(obj) {
 	self.y = obj.y || 0;
 	self.width = obj.w || null;
 	self.height = obj.h || null;
-	self.child = [];                //子元素
+	self.child = []; //子元素
 	self.width = null;
 	self.height = null;
 	self.imageName = obj.imageName || null;
 	self.index = 0;
 	self.texture = null;
-	self.isTrigger = false;         //默认不可以点击
-	self.awake = true;              //是否在舞台上展示
+	self.isTrigger = false; //默认不可以点击
+	self.awake = true; //是否在舞台上展示
 	self.id = 0;
 }
 
-_Sprite.prototype.draw = function () {
+_Sprite.prototype.draw = function() {
 	if (!this.texture) {
 		this.texture = Hamster.getImageTexture(this.imageName);
 	}
-	if(this.width == null){
+	if (this.width == null) {
 		this.width = this.texture.width;
 	}
 
-	if(this.height == null){
+	if (this.height == null) {
 		this.height = this.texture.height;
 	}
 
 	Hamster.rending(this.texture, this.x, this.y, this.width || this.texture.width, this.height || this.texture.height);
 }
 
-_Sprite.prototype.setTexture = function(textureName){
+_Sprite.prototype.setTexture = function(textureName) {
 	this.imageName = textureName;
 	this.texture = Hamster.getImageTexture(this.imageName);
 }
 
-_Sprite.prototype.add = function (gameObj, _x, _y) {
+_Sprite.prototype.add = function(gameObj, _x, _y) {
 	gameObj._parent = this.gameObj.name;
 }
 
-_Sprite.prototype.setPosition = function (m, n) {
+_Sprite.prototype.setPosition = function(m, n) {
 	this.x = m;
 	this.y = n;
 }
 
-_Sprite.prototype.scale = function (m, n) {
+_Sprite.prototype.scale = function(m, n) {
 	if (m < 0 || n < 0) {
 		console.error('放大的倍数不能小于0');
 	}
@@ -206,37 +207,37 @@ _Sprite.prototype.scale = function (m, n) {
 	this.height = this.height * n;
 }
 
-_Sprite.prototype.setSize = function (w, h) {
+_Sprite.prototype.setSize = function(w, h) {
 	this.width = w;
 	this.height = h;
 }
 
-_Sprite.prototype.setWidth = function (w) {
+_Sprite.prototype.setWidth = function(w) {
 	this.width = w;
 }
 
-_Sprite.prototype.setHeight = function (h) {
+_Sprite.prototype.setHeight = function(h) {
 	self.height = h;
 }
 
-_Sprite.prototype.setIndex = function (i) {
-	this.index = i;
-}
-// 点击事件
-_Sprite.prototype.onClick = function (callback) {
-	if(!callback){
-		return;
+_Sprite.prototype.setIndex = function(i) {
+		this.index = i;
 	}
-	callback();
-}
-// 生成类的方法
-Hamster.sprite = function (name, imageName, x, y, w, h) {
+	// 点击事件
+_Sprite.prototype.onClick = function(callback) {
+		if (!callback) {
+			return;
+		}
+		callback();
+	}
+	// 生成类的方法
+Hamster.sprite = function(name, imageName, x, y, w, h) {
 	return new _Sprite(name, imageName, x, y, w, h);
 };
 
 Hamster.freshList = {};
 
-Hamster.freshList.pushList = function (gameObj) {
+Hamster.freshList.pushList = function(gameObj) {
 	if (gameObj.layer == "Sprite") {
 		Hamster.spriteList.push(gameObj);
 	} else if (gameObj.layer == "UI") {
@@ -247,10 +248,10 @@ Hamster.freshList.pushList = function (gameObj) {
 /**main loop */
 Hamster.timeInterval = null;
 
-Hamster.setGameLoop = function (callback) {
+Hamster.setGameLoop = function(callback) {
 	var self = this;
 	self.callback = callback;
-	Hamster.timeInterval = setInterval(function () {
+	Hamster.timeInterval = setInterval(function() {
 		if (self.callback) {
 			self.callback();
 		}
@@ -258,14 +259,14 @@ Hamster.setGameLoop = function (callback) {
 }
 
 /**clear loop */
-Hamster.removeGameLoop = function () {
+Hamster.removeGameLoop = function() {
 	if (Hamster.timeInterval) {
 		clearInterval(Hamster.timeInterval);
 	}
 }
 
 /**add to stage */
-Hamster.add = function (gameObj, x, y) {
+Hamster.add = function(gameObj, x, y) {
 	var self = this;
 	gameObj.id = Hamster.spriteId;
 	self.x = x || gameObj.x;
@@ -276,15 +277,15 @@ Hamster.add = function (gameObj, x, y) {
 	Hamster.spriteId++;
 };
 
-Hamster.remove = function (obj) {
+Hamster.remove = function(obj) {
 	var self = this;
 	for (var i = 0; i < Hamster.uiList.length; i++) {
 		// if (obj.name == Hamster.uiList[i]["name"] && obj.id==Hamster.uiList[i].id) {
 		// 	Hamster.uiList.splice(i, 1);
 		// 	return;
 		// } 
-		
-		if (obj.id==Hamster.uiList[i].id) {
+
+		if (obj.id == Hamster.uiList[i].id) {
 			Hamster.uiList.splice(i, 1);
 			return;
 		}
@@ -297,26 +298,18 @@ Hamster.remove = function (obj) {
 function EventListenerSystem(canvas) {
 	var self = this;
 	var spriteList = Hamster.spriteList;
-	canvas.addEventListener("click", function (e) {
+	canvas.addEventListener("click", function(e) {
 		var position = self.getClickEventPosition(e);
 		// 事件分发
 		for (var i = Hamster.uiList.length - 1; i >= 0; i--) {
-			if (Hamster.uiList[i]["isTrigger"] == true
-				&& position.x <= (Hamster.uiList[i].x + Hamster.uiList[i].width)
-				&& position.x >= Hamster.uiList[i].x
-				&& position.y >= Hamster.uiList[i].y
-				&& (position.y <= Hamster.uiList[i].y + Hamster.uiList[i].height)) {
+			if (Hamster.uiList[i]["isTrigger"] == true && position.x <= (Hamster.uiList[i].x + Hamster.uiList[i].width) && position.x >= Hamster.uiList[i].x && position.y >= Hamster.uiList[i].y && (position.y <= Hamster.uiList[i].y + Hamster.uiList[i].height)) {
 				Hamster.uiList[i].onClick();
 				return;
 			}
 		}
 		// sprite的分发
 		for (var i = Hamster.spriteList.length - 1; i >= 0; i--) {
-			if (Hamster.spriteList[i]["isTrigger"] == true
-				&& position.x <= (Hamster.spriteList[i].x + Hamster.spriteList[i].width)
-				&& position.x >= Hamster.spriteList[i].x
-				&& position.y >= Hamster.spriteList[i].y
-				&& (position.y <= Hamster.spriteList[i].y + Hamster.spriteList[i].height)) {
+			if (Hamster.spriteList[i]["isTrigger"] == true && position.x <= (Hamster.spriteList[i].x + Hamster.spriteList[i].width) && position.x >= Hamster.spriteList[i].x && position.y >= Hamster.spriteList[i].y && (position.y <= Hamster.spriteList[i].y + Hamster.spriteList[i].height)) {
 				Hamster.spriteList[i].onClick();
 				return;
 			}
@@ -330,7 +323,7 @@ function EventListenerSystem(canvas) {
 	// },true);
 }
 
-EventListenerSystem.prototype.getClickEventPosition = function (ev) {
+EventListenerSystem.prototype.getClickEventPosition = function(ev) {
 	var x, y;
 	if (ev.layerX || ev.layerX == 0) {
 		x = ev.layerX;
@@ -339,16 +332,18 @@ EventListenerSystem.prototype.getClickEventPosition = function (ev) {
 		x = ev.offsetX;
 		y = ev.offsetY;
 	}
-	return { x: x, y: y };
+	return {
+		x: x,
+		y: y
+	};
 }
 
-Hamster.addEventListener = function (obj, eventName, callback) {
+Hamster.addEventListener = function(obj, eventName, callback) {
 	if (eventName == "click") {
 		obj.onClick = callback;
 	}
 
-	if(eventName == "keydown"){
+	if (eventName == "keydown") {
 		obj.onKeyDown = callback;
 	}
 }
-
