@@ -68,7 +68,6 @@ Hamster.extend = function (child, parent) {
  * @return {array}  
  * */
 function sortListByIndex(objectArray) {
-	// console.log(objectArray);
 	var objArray = objectArray;
 	// var objArray = [].concat(objectArray);
 	// 跳出递归的条件
