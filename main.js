@@ -86,7 +86,33 @@ HandCard.prototype.refresh = function(side) {
 
 // 补牌
 HandCard.prototype.addCard = function() {
-	GAME_DATA.heroHandCardList.push(this.cardList.splice(1, 1));
+	var _temp = this.cardList.splice(1, 1)[0];
+	_temp.x = 180 + (GAME_DATA.heroHandCardList.length) * 80;
+	Hamster.addEventListener(_temp, "click", function() {
+		if (this.status == "normal") {
+			this.status = "normal";
+			this.setSize(85, 120);
+			this.y = 460;
+			this.index = 0;
+			GAME_DATA.choiseCard = null;
+			GAME_DATA.choiseCard = this;
+			this.setSize(150, 180);
+			this.y = 420;
+			this.setIndex(1000);
+			this.status = "click";
+		} else {
+			this.setSize(85, 120);
+			this.status = "normal";
+			GAME_DATA.choiseCard = null;
+			this.y = 460;
+			this.index = 0;
+		}
+	});
+	GAME_DATA.heroHandCardList.push(_temp);
+
+	Hamster.add(_temp);
+
+	// GAME_DATA.heroHandCardList.push(this.cardList.splice(1, 1));
 }
 
 /**
@@ -168,7 +194,6 @@ HeroFighter.prototype.buildFighter = function(obj) {
 HeroFighter.prototype.showHeroFighter = function() {
 	var self = this;
 	if (this.side == "enemy") {
-		
 		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y = 180;
 		// setTexture会直接切换图片
 		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].setTexture(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_fight");
@@ -194,7 +219,6 @@ HeroFighter.prototype.showHeroFighter = function() {
 		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
 
 			GAME_DATA.fight_enemyChoise = this;
-			console.warn(this);
 			alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
 
 			var nenmyResult = null;
@@ -214,7 +238,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 				}
 				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterAttack);
 				Hamster.remove(GAME_DATA.fight_enemyChoise.fighterHp);
-			}else{
+			} else {
 				this.hp = nenmyResult;
 				this.fighterHp.setText(nenmyResult);
 			}
@@ -229,6 +253,9 @@ HeroFighter.prototype.showHeroFighter = function() {
 				}
 				Hamster.remove(GAME_DATA.fight_heroChoise.fighterAttack);
 				Hamster.remove(GAME_DATA.fight_heroChoise.fighterHp);
+			} else {
+				GAME_DATA.fight_heroChoise.hp = heroResult;
+				GAME_DATA.fight_heroChoise.fighterHp.setText(heroResult);
 			}
 			Hamster.cvs.style.cursor = "default";
 		});
@@ -236,44 +263,44 @@ HeroFighter.prototype.showHeroFighter = function() {
 		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack);
 		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp);
 
+		// 对随从队列经行重排
+		this.reListFightField(GAME_DATA.heroFightFieldList);
+		this.reListFightField(GAME_DATA.enemyFightFieldList);
+
 	} else if (this.side == "hero") {
-		// 玩家的战场随从事件
-		for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+		// 每次只添加一个随从到战场上
+		var i = GAME_DATA.heroFightFieldList.length - 1;
+		GAME_DATA.heroFightFieldList[i].x = 180 + i * 85;
+		Hamster.add(GAME_DATA.heroFightFieldList[i]);
+		GAME_DATA.heroFightFieldList[i].fighterAttack = new Hamster.UI.Text({
+			"name": GAME_DATA.heroFightFieldList[i].name + "_attack",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.heroFightFieldList[i].attack,
+			"x": GAME_DATA.heroFightFieldList[i].x + 10,
+			"y": GAME_DATA.heroFightFieldList[i].y + 110
+		});
+		GAME_DATA.heroFightFieldList[i].fighterHp = new Hamster.UI.Text({
+			"name": GAME_DATA.heroFightFieldList[i].name + "_hp",
+			"fontSize": 18,
+			"color": "#fff",
+			"text": GAME_DATA.heroFightFieldList[i].hp,
+			"x": GAME_DATA.heroFightFieldList[i].x + 66,
+			"y": GAME_DATA.heroFightFieldList[i].y + 110
+		});
 
-			GAME_DATA.heroFightFieldList[i].x = 180 + i * 85;
-			Hamster.add(GAME_DATA.heroFightFieldList[i]);
-			GAME_DATA.heroFightFieldList[i].fighterAttack = new Hamster.UI.Text({
-				"name": GAME_DATA.heroFightFieldList[i].name + "_attack",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.heroFightFieldList[i].attack,
-				"x": GAME_DATA.heroFightFieldList[i].x + 10,
-				"y": GAME_DATA.heroFightFieldList[i].y + 110
-			});
-			GAME_DATA.heroFightFieldList[i].fighterHp = new Hamster.UI.Text({
-				"name": GAME_DATA.heroFightFieldList[i].name + "_hp",
-				"fontSize": 18,
-				"color": "#fff",
-				"text": GAME_DATA.heroFightFieldList[i].hp,
-				"x": GAME_DATA.heroFightFieldList[i].x + 66,
-				"y": GAME_DATA.heroFightFieldList[i].y + 110
-			});
+		Hamster.addEventListener(GAME_DATA.heroFightFieldList[i], "click", function() {
+			if (this.action == 0) {
+				alert("你目前不能操作该随从！");
+				return;
+			} else if (this.action != 0) {
+				GAME_DATA.fight_heroChoise = this;
+			}
+			Hamster.cvs.style.cursor = "url(./public/resource/attack_icon.png),auto";
+		});
 
-			Hamster.addEventListener(GAME_DATA.heroFightFieldList[i], "click", function() {
-				if (this.action == 0) {
-					alert("你目前不能操作该随从！");
-					return;
-				} else if (this.action != 0) {
-					GAME_DATA.fight_heroChoise = this;
-					console.log(GAME_DATA.fight_heroChoise);
-				}
-
-				Hamster.cvs.style.cursor = "url(./public/resource/attack_icon.png),auto";
-			});
-
-			Hamster.add(GAME_DATA.heroFightFieldList[i].fighterAttack);
-			Hamster.add(GAME_DATA.heroFightFieldList[i].fighterHp);
-		}
+		Hamster.add(GAME_DATA.heroFightFieldList[i].fighterAttack);
+		Hamster.add(GAME_DATA.heroFightFieldList[i].fighterHp);
 	}
 }
 
@@ -289,6 +316,22 @@ HeroFighter.prototype.changeAction = function() {
 // 战斗结算
 HeroFighter.prototype.getFightResult = function() {
 
+}
+
+//重新对战场角色进行排列
+HeroFighter.prototype.reListFightField = function(list) {
+	if (list.length == 0) {
+		return;
+	}
+
+	for (var i = 0; i < list.length; i++) {
+		list[i].x = 180 + i * 85;
+		list[i].fighterAttack.x = list[i].x + 10;
+		list[i].fighterAttack.y = list[i].y + 110;
+
+		list[i].fighterHp.x = list[i].x + 66;
+		list[i].fighterHp.y = list[i].y + 110;
+	}
 }
 
 /**
@@ -375,12 +418,14 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 				// 增加回合数
 				heroFee.addTurn();
 				enemyFee.addTurn();
+				hero.addCard();
 				return;
 			}
 		}
 		actionSide = true;
 		turn_over_button.setTexture("hero_turn_button");
 		alert("电脑选择了不出牌，不知道他有什么阴谋诡计");
+		hero.addCard();
 		hf.changeAction();
 		heroFee.addTurn();
 		enemyFee.addTurn();
