@@ -87,13 +87,20 @@ HandCard.prototype.refresh = function(side) {
 // 补牌
 HandCard.prototype.addCard = function() {
 	var _temp = this.cardList.splice(1, 1)[0];
+	if (GAME_DATA.heroHandCardList.length > 6) {
+		alert("您的手牌已经满了");
+		return;
+	}
 	_temp.x = 180 + (GAME_DATA.heroHandCardList.length) * 80;
 	Hamster.addEventListener(_temp, "click", function() {
 		if (this.status == "normal") {
-			this.status = "normal";
-			this.setSize(85, 120);
-			this.y = 460;
-			this.index = 0;
+			for (var i = 0; i < GAME_DATA.heroHandCardList.length; i++) {
+				GAME_DATA.heroHandCardList[i].status = "normal";
+				GAME_DATA.heroHandCardList[i].setSize(85, 120);
+				GAME_DATA.heroHandCardList[i].y = 460;
+				GAME_DATA.heroHandCardList[i].index = 0;
+			}
+
 			GAME_DATA.choiseCard = null;
 			GAME_DATA.choiseCard = this;
 			this.setSize(150, 180);
@@ -258,6 +265,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 				GAME_DATA.fight_heroChoise.fighterHp.setText(heroResult);
 			}
 			Hamster.cvs.style.cursor = "default";
+			GAME_DATA.fight_heroChoise.action = 0;
 		});
 
 		Hamster.add(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack);
@@ -383,7 +391,11 @@ FeeManager.prototype.reFreshText = function() {
 
 // 进入下一轮
 FeeManager.prototype.addTurn = function() {
-	this.round++;
+
+	if (this.round < 9) {
+		this.round++;
+	}
+
 	this.currentFee = this.round;
 	this.reFreshText();
 }
@@ -399,6 +411,23 @@ function EnemyAIController() {
 EnemyAIController.prototype.shotCard = function(enemy) {
 	var self = this;
 	enemy.addCard();
+	self.attack();
+
+	// 如果场上的随从大于5个则不出牌
+	if (GAME_DATA.enemyFightFieldList.length >= 5) {
+		actionSide = true;
+		turn_over_button.setTexture("hero_turn_button");
+
+		// 改变角色状态
+		hf.changeAction();
+
+		// 增加回合数
+		heroFee.addTurn();
+		enemyFee.addTurn();
+		hero.addCard();
+		return;
+
+	}
 	setTimeout(function() {
 		// 选择合适的卡
 		for (var i = 0; i < GAME_DATA.enemyHandCardList.length; i++) {
@@ -433,8 +462,64 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 
 }
 
-// 电脑Ai角色开始发动进攻
+/**
+ * AI核心逻辑
+ */
 EnemyAIController.prototype.attack = function() {
+	var enemyAllAttack = 0; //enemy总的攻击力
+	var heroAllAttack = 0; //玩家场上随从的总攻击力
+
+	if (GAME_DATA.enemyFightFieldList.length == 0) {
+		console.log("没随从打个屁呀");
+		return;
+	}
+
+	for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+		enemyAllAttack += GAME_DATA.enemyFightFieldList[i].attack;
+	}
+
+	for (var j = 0; j < GAME_DATA.heroFightFieldList.length; j++) {
+		heroAllAttack += GAME_DATA.heroFightFieldList[j].attack;
+	}
+
+	if (enemyAllAttack >= heroAllAttack) {
+		alert("打你的脸，兄弟们快上");
+		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+			var _result = parseInt(myHeroHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].fighterAttack.text);
+			myHeroHp.setText(_result);
+		}
+	} else {
+		var max_attack = null;
+		for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+			max_attack = GAME_DATA.heroFightFieldList[0];
+			if (GAME_DATA.heroFightFieldList[i].attack > max_attack.attack) {
+				max_attack = GAME_DATA.heroFightFieldList[i];
+			}
+		}
+
+		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+			if (parseInt(max_attack.fighterHp.text) > 0) {
+				var _hurt = 0;
+				_hurt = parseInt(max_attack.fighterHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].attack)
+				max_attack.fighterHp.setText(_hurt);
+				alert("敌人" + GAME_DATA.enemyFightFieldList[i].name + "攻击了我方的" + max_attack.name);
+
+				if (parseInt(max_attack.fighterHp.text) <= 0) {
+					Hamster.remove(max_attack);
+					for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
+						if (GAME_DATA.heroFightFieldList[i].id == max_attack.id) {
+							GAME_DATA.heroFightFieldList.splice(i, 1);
+						}
+					}
+					Hamster.remove(max_attack.fighterAttack);
+					Hamster.remove(max_attack.fighterHp);
+				}
+			}
+		}
+
+		console.log(max_attack);
+	}
+
 
 }
 
@@ -515,11 +600,11 @@ Hamster.addEventListener(enemyHero, "click", function() {
 		return;
 	}
 	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的英雄");
-
-	var nenmyResult = null;
-	var heroResult = null;
-
-	console.log(1);
+	var enemyResult = null;
+	enemyResult = parseInt(enemyHeroHp.text) - parseInt(GAME_DATA.fight_heroChoise.fighterAttack.text);
+	enemyHeroHp.setText(enemyResult);
+	Hamster.cvs.style.cursor = "default";
+	GAME_DATA.fight_heroChoise.action = 0;
 });
 Hamster.add(enemyHero);
 
@@ -533,7 +618,7 @@ Hamster.add(myHeroHpBackground);
 
 var myHeroHp = new Hamster.UI.Text({
 	"name": "myHeroHp",
-	"text": "30",
+	"text": "20",
 	"fontSize": "25",
 	"color": "#fff",
 	"x": 55,
@@ -602,6 +687,11 @@ Hamster.add(shot_card_button);
 
 Hamster.addEventListener(shot_card_button, "click", function() {
 	if (!GAME_DATA.choiseCard) {
+		return;
+	}
+
+	if (GAME_DATA.heroFightFieldList.length > 4) {
+		alert("你的随从已经布满全场");
 		return;
 	}
 

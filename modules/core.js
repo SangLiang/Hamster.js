@@ -276,6 +276,7 @@ Hamster.add = function(gameObj, x, y) {
 	Hamster.spriteId++;
 };
 
+// 清除某个元素
 Hamster.remove = function(obj) {
 	var self = this;
 	for (var i = 0; i < Hamster.uiList.length; i++) {
@@ -289,6 +290,11 @@ Hamster.remove = function(obj) {
 			return;
 		}
 	}
+}
+
+// 清除所有元素
+Hamster.removeAll = function(){
+	Hamster.uiList = [];
 }
 
 /**
