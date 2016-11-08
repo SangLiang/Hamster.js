@@ -587,7 +587,7 @@ var background = new Hamster.sprite({
 });
 Hamster.add(background);
 
-// 我的英雄头像
+// 敌人英雄头像
 var enemyHero = new Hamster.sprite({
 	"name": "enemyHero",
 	"imageName": "fighter_hero",
@@ -602,6 +602,10 @@ Hamster.addEventListener(enemyHero, "click", function() {
 	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的英雄");
 	var enemyResult = null;
 	enemyResult = parseInt(enemyHeroHp.text) - parseInt(GAME_DATA.fight_heroChoise.fighterAttack.text);
+	if(enemyResult<=0){
+		alert("恭喜您获得了游戏的胜利");
+		Hamster.removeAll();
+	}
 	enemyHeroHp.setText(enemyResult);
 	Hamster.cvs.style.cursor = "default";
 	GAME_DATA.fight_heroChoise.action = 0;

@@ -294,7 +294,9 @@ Hamster.remove = function(obj) {
 
 // 清除所有元素
 Hamster.removeAll = function(){
+	// 清除所有的渲染数组
 	Hamster.uiList = [];
+	Hamster.spriteList = [];
 }
 
 /**
