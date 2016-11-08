@@ -1,3 +1,6 @@
+/**
+ * UI库，button和text都继承自sprite
+ */
 
 Hamster.UI = {};
 
