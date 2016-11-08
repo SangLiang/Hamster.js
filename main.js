@@ -503,13 +503,25 @@ var background = new Hamster.sprite({
 Hamster.add(background);
 
 // 我的英雄头像
-var myHero = new Hamster.sprite({
-	"name": "myHero",
+var enemyHero = new Hamster.sprite({
+	"name": "enemyHero",
 	"imageName": "fighter_hero",
 	"x": 10,
 	"y": 20
 });
-Hamster.add(myHero);
+enemyHero.isTrigger = true;
+Hamster.addEventListener(enemyHero, "click", function() {
+	if (GAME_DATA.fight_heroChoise == null) {
+		return;
+	}
+	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的英雄");
+
+	var nenmyResult = null;
+	var heroResult = null;
+
+	console.log(1);
+});
+Hamster.add(enemyHero);
 
 var myHeroHpBackground = new Hamster.UI.Button({
 	"name": "myHeroHpBackground",
@@ -548,13 +560,13 @@ var enemyHeroHp = new Hamster.UI.Text({
 Hamster.add(enemyHeroHp);
 
 // 敌人英雄头像
-var enemyHero = new Hamster.sprite({
-	"name": "enemyHero",
+var myHero = new Hamster.sprite({
+	"name": "myHero",
 	"imageName": "fighter_hero",
 	"x": 10,
 	"y": 450
 });
-Hamster.add(enemyHero);
+Hamster.add(myHero);
 
 // 回合结束按钮
 var turn_over_button = new Hamster.UI.Button({
