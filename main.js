@@ -487,6 +487,12 @@ EnemyAIController.prototype.attack = function() {
 		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
 			var _result = parseInt(myHeroHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].fighterAttack.text);
 			myHeroHp.setText(_result);
+
+			if(parseInt(myHeroHp.text)<=0){
+				alert("你被打死了，游戏结束");
+				Hamster.removeAll();
+				return;
+			}
 		}
 	} else {
 		var max_attack = null;
@@ -502,6 +508,7 @@ EnemyAIController.prototype.attack = function() {
 				var _hurt = 0;
 				_hurt = parseInt(max_attack.fighterHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].attack)
 				max_attack.fighterHp.setText(_hurt);
+				max_attack.hp = _hurt;
 				alert("敌人" + GAME_DATA.enemyFightFieldList[i].name + "攻击了我方的" + max_attack.name);
 
 				if (parseInt(max_attack.fighterHp.text) <= 0) {
@@ -516,11 +523,7 @@ EnemyAIController.prototype.attack = function() {
 				}
 			}
 		}
-
-		console.log(max_attack);
 	}
-
-
 }
 
 // ---卡片的配置信息
@@ -678,7 +681,6 @@ Hamster.addEventListener(turn_over_button, "click", function() {
 	}, 500);
 });
 Hamster.add(turn_over_button);
-
 
 // 出牌按钮
 var shot_card_button = new Hamster.UI.Button({
