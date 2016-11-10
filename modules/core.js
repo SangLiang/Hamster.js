@@ -280,16 +280,27 @@ Hamster.add = function(gameObj, x, y) {
 Hamster.remove = function(obj) {
 	var self = this;
 	for (var i = 0; i < Hamster.uiList.length; i++) {
-		// if (obj.name == Hamster.uiList[i]["name"] && obj.id==Hamster.uiList[i].id) {
-		// 	Hamster.uiList.splice(i, 1);
-		// 	return;
-		// } 
 
 		if (obj.id == Hamster.uiList[i].id) {
 			Hamster.uiList.splice(i, 1);
 			return;
 		}
 	}
+}
+
+// 清楚某个tag
+Hamster.removeTag = function(tagName) {
+    for (var i = 0; i < Hamster.uiList.length; i++) {
+        if (Hamster.uiList[i].tag == tagName) {
+            Hamster.uiList.splice(i, 1);
+        }
+    }
+
+    for (var j = 0; j < Hamster.spriteList.length; j++) {
+        if (Hamster.spriteList[i].tag == tagName) {
+            Hamster.spriteList.splice(i, 1);
+        }
+    }
 }
 
 // 清除所有元素
