@@ -483,7 +483,7 @@ EnemyAIController.prototype.attack = function() {
 	}
 
 	if (enemyAllAttack >= heroAllAttack) {
-		alert("打你的脸，兄弟们快上");
+		alert("敌人开始攻击您的英雄");
 		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
 			var _result = parseInt(myHeroHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].fighterAttack.text);
 			myHeroHp.setText(_result);
@@ -525,6 +525,25 @@ EnemyAIController.prototype.attack = function() {
 		}
 	}
 }
+
+//卡牌剩余数量计数器 
+function RestCardRecord (side){
+	this.side = side;
+	this.init();
+}
+
+// 初始化
+RestCardRecord.prototype.init = function(){
+	if(this.side == "hero"){
+		this.card = new Hamster.UI.Button({
+			"imageName":"card_back"
+		});
+
+		Hamster.add(this.card);
+	}
+}
+
+
 
 // ---卡片的配置信息
 var CARD_INFO = [{
