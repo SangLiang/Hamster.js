@@ -441,6 +441,9 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 
 				self.enemyFighter.showHeroFighter();
 
+				//更新剩余卡牌数刷新 
+				heroCardRemains.refresh();
+
 				// 改变角色状态
 				hf.changeAction();
 
@@ -454,6 +457,9 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 		actionSide = true;
 		turn_over_button.setTexture("hero_turn_button");
 		alert("电脑选择了不出牌，不知道他有什么阴谋诡计");
+
+		//更新剩余卡牌数刷新 
+		heroCardRemains.refresh();
 		hero.addCard();
 		hf.changeAction();
 		heroFee.addTurn();
@@ -536,14 +542,31 @@ function RestCardRecord (side){
 RestCardRecord.prototype.init = function(){
 	if(this.side == "hero"){
 		this.card = new Hamster.UI.Button({
-			"imageName":"card_back"
+			"imageName":"card_back",
+			"x": 640,
+			"y": 390
 		});
+		this.card.setSize(45,70);
 
+		var text = hero.cardList.length;
+
+		this.remain = new Hamster.UI.Text({
+			"name": "myHeroHp",
+			"text": text,
+			"fontSize": "25",
+			"color": "#000",
+			"x": this.card.x+50,
+			"y": this.card.y+45
+		});
 		Hamster.add(this.card);
+		Hamster.add(this.remain);
 	}
 }
 
-
+RestCardRecord.prototype.refresh = function(){
+	var text = hero.cardList.length;
+	this.remain.setText(text);
+}
 
 // ---卡片的配置信息
 var CARD_INFO = [{
@@ -596,8 +619,10 @@ var ai = new EnemyAIController();
 
 var hero = new HandCard();
 var enemy = new EnemyCard();
-var heroFee = new FeeManager(hero_fee, turn_count, 650, 350);
+var heroFee = new FeeManager(hero_fee, turn_count, 650, 330);
 var enemyFee = new FeeManager(hero_fee, turn_count, 650, 200);
+
+var heroCardRemains = new RestCardRecord("hero");
 
 //---游戏主逻辑
 // 背景
