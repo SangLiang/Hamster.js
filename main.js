@@ -11,7 +11,7 @@ Hamster.init("main", 800, 600);
  * 用户手牌class
  */
 function HandCard() {
-	this.cardList = this.buildHandCardList(15, 3);
+	this.cardList = this.buildHandCardList(20, 3);
 	this.showHandCardFive(this.cardList);
 }
 
@@ -118,15 +118,13 @@ HandCard.prototype.addCard = function() {
 	GAME_DATA.heroHandCardList.push(_temp);
 
 	Hamster.add(_temp);
-
-	// GAME_DATA.heroHandCardList.push(this.cardList.splice(1, 1));
 }
 
 /**
  * ---敌人手牌类
  */
 function EnemyCard() {
-	this.cardList = this.buildHandCardList(15, 3);
+	this.cardList = this.buildHandCardList(20, 3);
 	this.showHandCardFive(this.cardList);
 }
 Hamster.extend(EnemyCard, HandCard);
@@ -494,14 +492,16 @@ EnemyAIController.prototype.attack = function() {
 			var _result = parseInt(myHeroHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].fighterAttack.text);
 			myHeroHp.setText(_result);
 
-			if(parseInt(myHeroHp.text)<=0){
+			if (parseInt(myHeroHp.text) <= 0) {
 				alert("你被打死了，游戏结束");
 				Hamster.removeAll();
 				return;
 			}
 		}
 	} else {
+		// 攻击力最高的对象
 		var max_attack = null;
+
 		for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
 			max_attack = GAME_DATA.heroFightFieldList[0];
 			if (GAME_DATA.heroFightFieldList[i].attack > max_attack.attack) {
@@ -510,13 +510,24 @@ EnemyAIController.prototype.attack = function() {
 		}
 
 		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
+
+			// 当我放随从的生命值大于0
 			if (parseInt(max_attack.fighterHp.text) > 0) {
 				var _hurt = 0;
-				_hurt = parseInt(max_attack.fighterHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].attack)
+				var _enemyHurt = 0; //敌人受到的上海
+				_hurt = parseInt(max_attack.fighterHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].attack);
+				_enemyHurt = parseInt(GAME_DATA.enemyFightFieldList[i].fighterHp.text) - parseInt(max_attack.attack);
+
+				// 更新战斗后的数据
 				max_attack.fighterHp.setText(_hurt);
 				max_attack.hp = _hurt;
+
+				GAME_DATA.enemyFightFieldList[i].fighterHp.setText(_enemyHurt);
+				GAME_DATA.enemyFightFieldList[i].hp = _enemyHurt;
+
 				alert("敌人" + GAME_DATA.enemyFightFieldList[i].name + "攻击了我方的" + max_attack.name);
 
+				// 结算后如果我方随从死亡
 				if (parseInt(max_attack.fighterHp.text) <= 0) {
 					Hamster.remove(max_attack);
 					for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
@@ -527,26 +538,38 @@ EnemyAIController.prototype.attack = function() {
 					Hamster.remove(max_attack.fighterAttack);
 					Hamster.remove(max_attack.fighterHp);
 				}
+
+				var _count = 0;
+				for (var j = 0; j < GAME_DATA.enemyFightFieldList.length; j++) {
+					if (GAME_DATA.enemyFightFieldList[j].hp <= 0) {
+						console.warn(GAME_DATA.enemyFightFieldList.length);
+						Hamster.remove(GAME_DATA.enemyFightFieldList[j]);
+						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterAttack);
+						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterHp);
+						GAME_DATA.enemyFightFieldList.splice(j, 1);
+					}
+				}
 			}
+
 		}
 	}
 }
 
 //卡牌剩余数量计数器 
-function RestCardRecord (side){
+function RestCardRecord(side) {
 	this.side = side;
 	this.init();
 }
 
 // 初始化
-RestCardRecord.prototype.init = function(){
-	if(this.side == "hero"){
+RestCardRecord.prototype.init = function() {
+	if (this.side == "hero") {
 		this.card = new Hamster.UI.Button({
-			"imageName":"card_back",
+			"imageName": "card_back",
 			"x": 640,
 			"y": 390
 		});
-		this.card.setSize(45,70);
+		this.card.setSize(45, 70);
 
 		var text = hero.cardList.length;
 
@@ -555,15 +578,37 @@ RestCardRecord.prototype.init = function(){
 			"text": text,
 			"fontSize": "25",
 			"color": "#000",
-			"x": this.card.x+50,
-			"y": this.card.y+45
+			"x": this.card.x + 50,
+			"y": this.card.y + 45
+		});
+		Hamster.add(this.card);
+		Hamster.add(this.remain);
+	}
+
+	if (this.side == "enemy") {
+		this.card = new Hamster.UI.Button({
+			"imageName": "card_back",
+			"x": 640,
+			"y": 130
+		});
+		this.card.setSize(45, 70);
+
+		var text = enemy.cardList.length;
+
+		this.remain = new Hamster.UI.Text({
+			"name": "myHeroHp",
+			"text": text,
+			"fontSize": "25",
+			"color": "#000",
+			"x": this.card.x + 50,
+			"y": this.card.y + 45
 		});
 		Hamster.add(this.card);
 		Hamster.add(this.remain);
 	}
 }
 
-RestCardRecord.prototype.refresh = function(){
+RestCardRecord.prototype.refresh = function() {
 	var text = hero.cardList.length;
 	this.remain.setText(text);
 }
@@ -623,6 +668,7 @@ var heroFee = new FeeManager(hero_fee, turn_count, 650, 330);
 var enemyFee = new FeeManager(hero_fee, turn_count, 650, 200);
 
 var heroCardRemains = new RestCardRecord("hero");
+var enemyCardRemains = new RestCardRecord("enemy");
 
 //---游戏主逻辑
 // 背景
@@ -649,7 +695,7 @@ Hamster.addEventListener(enemyHero, "click", function() {
 	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的英雄");
 	var enemyResult = null;
 	enemyResult = parseInt(enemyHeroHp.text) - parseInt(GAME_DATA.fight_heroChoise.fighterAttack.text);
-	if(enemyResult<=0){
+	if (enemyResult <= 0) {
 		alert("恭喜您获得了游戏的胜利");
 		Hamster.removeAll();
 	}
