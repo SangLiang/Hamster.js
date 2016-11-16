@@ -38,10 +38,10 @@ HandCard.prototype.buildHandCardList = function(num, randomRange) {
 	}
 	// 展示手上的4张卡牌
 HandCard.prototype.showHandCardFive = function(handCardList) {
-	var _templist = handCardList.splice(1, 4);
+	var _templist = handCardList.splice(0, 4);
 	GAME_DATA.heroHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
-		_templist[i].x = 180 + 80 * i;
+		_templist[i].x = 180 + 80 *i;
 
 		// 给生成出来的卡片添加点击事件
 		Hamster.addEventListener(_templist[i], "click", function() {
@@ -86,7 +86,10 @@ HandCard.prototype.refresh = function(side) {
 
 // 补牌
 HandCard.prototype.addCard = function() {
-	var _temp = this.cardList.splice(1, 1)[0];
+	if (this.cardList.length <= 0) {
+		return;
+	}
+	var _temp = this.cardList.splice(0, 1)[0];
 	if (GAME_DATA.heroHandCardList.length > 6) {
 		alert("您的手牌已经满了");
 		return;
@@ -136,7 +139,7 @@ EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 		var _temp = new Hamster.UI.Button({
 			"name": CARD_INFO[_num]["name"],
 			"imageName": "card_back",
-			"x": 110 + (85 * i),
+			"x": 110 + (85 * (i+1)),
 			"y": 20
 		});
 		_temp.setSize(85, 120);
@@ -151,7 +154,7 @@ EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 
 // 重写show方法
 EnemyCard.prototype.showHandCardFive = function(handCardList) {
-	var _templist = handCardList.splice(1, 4);
+	var _templist = handCardList.splice(0, 4);
 	GAME_DATA.enemyHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
 		Hamster.add(_templist[i]);
@@ -159,7 +162,10 @@ EnemyCard.prototype.showHandCardFive = function(handCardList) {
 }
 
 EnemyCard.prototype.addCard = function() {
-	var _temp = this.cardList.splice(1, 1)[0];
+	if (this.cardList.length <= 0) {
+		return;
+	}
+	var _temp = this.cardList.splice(0, 1)[0];
 	_temp.x = 180 + (GAME_DATA.enemyHandCardList.length) * 85;
 	GAME_DATA.enemyHandCardList.push(_temp);
 	Hamster.add(_temp);
@@ -411,6 +417,10 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 	enemy.addCard();
 	self.attack();
 
+	if (parseInt(myHeroHp.text) <= 0) {
+		return;
+	}
+
 	// 如果场上的随从大于5个则不出牌
 	if (GAME_DATA.enemyFightFieldList.length >= 5) {
 		actionSide = true;
@@ -424,7 +434,6 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 		enemyFee.addTurn();
 		hero.addCard();
 		return;
-
 	}
 	setTimeout(function() {
 		// 选择合适的卡
