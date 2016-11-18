@@ -162,6 +162,7 @@ EnemyCard.prototype.showHandCardFive = function(handCardList) {
 }
 
 EnemyCard.prototype.addCard = function() {
+	console.log(this.cardList.length);
 	if (this.cardList.length <= 0) {
 		return;
 	}
@@ -240,7 +241,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 			heroResult = GAME_DATA.fight_heroChoise.hp - GAME_DATA.fight_enemyChoise.attack;
 
 			if (nenmyResult <= 0) {
-				alert("敌人死翘翘了");
+				// alert("敌人死翘翘了");
 				Hamster.remove(GAME_DATA.fight_enemyChoise);
 				for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
 					if (GAME_DATA.enemyFightFieldList[i].id == GAME_DATA.fight_enemyChoise.id) {
@@ -255,7 +256,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 			}
 
 			if (heroResult <= 0) {
-				alert("我的随从也嗝屁了");
+				// alert("我的随从也嗝屁了");
 				Hamster.remove(GAME_DATA.fight_heroChoise);
 				for (var i = 0; i < GAME_DATA.heroFightFieldList.length; i++) {
 					if (GAME_DATA.heroFightFieldList[i].id == GAME_DATA.fight_heroChoise.id) {
@@ -414,6 +415,9 @@ function EnemyAIController() {
 // 出牌
 EnemyAIController.prototype.shotCard = function(enemy) {
 	var self = this;
+
+	//更新剩余卡牌 
+	enemyCardRemains.refresh();
 	enemy.addCard();
 	self.attack();
 
@@ -551,7 +555,6 @@ EnemyAIController.prototype.attack = function() {
 				var _count = 0;
 				for (var j = 0; j < GAME_DATA.enemyFightFieldList.length; j++) {
 					if (GAME_DATA.enemyFightFieldList[j].hp <= 0) {
-						console.warn(GAME_DATA.enemyFightFieldList.length);
 						Hamster.remove(GAME_DATA.enemyFightFieldList[j]);
 						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterAttack);
 						Hamster.remove(GAME_DATA.enemyFightFieldList[j].fighterHp);
