@@ -506,6 +506,7 @@ EnemyAIController.prototype.attack = function() {
 		alert("敌人开始攻击您的英雄");
 		for (var i = 0; i < GAME_DATA.enemyFightFieldList.length; i++) {
 			var _result = parseInt(myHeroHp.text) - parseInt(GAME_DATA.enemyFightFieldList[i].fighterAttack.text);
+			console.log(GAME_DATA.enemyFightFieldList[i]);
 			myHeroHp.setText(_result);
 
 			if (parseInt(myHeroHp.text) <= 0) {
@@ -555,7 +556,6 @@ EnemyAIController.prototype.attack = function() {
 					Hamster.remove(max_attack.fighterHp);
 				}
 
-				var _count = 0;
 				for (var j = 0; j < GAME_DATA.enemyFightFieldList.length; j++) {
 					if (GAME_DATA.enemyFightFieldList[j].hp <= 0) {
 						Hamster.remove(GAME_DATA.enemyFightFieldList[j]);
@@ -564,6 +564,7 @@ EnemyAIController.prototype.attack = function() {
 						GAME_DATA.enemyFightFieldList.splice(j, 1);
 					}
 				}
+
 			}
 
 		}
