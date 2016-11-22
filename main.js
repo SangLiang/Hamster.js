@@ -11,7 +11,7 @@ Hamster.init("main", 800, 600);
  * 用户手牌class
  */
 function HandCard() {
-	this.cardList = this.buildHandCardList(20, 3);
+	this.cardList = this.buildHandCardList(20, 4);
 	this.showHandCardFive(this.cardList);
 }
 
@@ -32,6 +32,7 @@ HandCard.prototype.buildHandCardList = function(num, randomRange) {
 			_temp.attack = CARD_INFO[_num]["attack"];
 			_temp.hp = CARD_INFO[_num]["hp"];
 			_temp.name = CARD_INFO[_num]["name"];
+			_temp.cnName = CARD_INFO[_num]["cn_name"];
 			_list.push(_temp);
 		}
 		return _list;
@@ -127,7 +128,7 @@ HandCard.prototype.addCard = function() {
  * ---敌人手牌类
  */
 function EnemyCard() {
-	this.cardList = this.buildHandCardList(20, 3);
+	this.cardList = this.buildHandCardList(20, 4);
 	this.showHandCardFive(this.cardList);
 }
 Hamster.extend(EnemyCard, HandCard);
@@ -147,6 +148,7 @@ EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 		_temp.attack = CARD_INFO[_num]["attack"];
 		_temp.hp = CARD_INFO[_num]["hp"];
 		_temp.name = CARD_INFO[_num]["name"];
+		_temp.cnName = CARD_INFO[_num]["cn_name"];
 		_list.push(_temp);
 	}
 	return _list;
@@ -199,6 +201,7 @@ HeroFighter.prototype.buildFighter = function(obj) {
 	_temp.hp = obj.hp;
 	_temp.action = 0;
 	_temp.side = this.side; //角色阵营
+	_temp.cnName = obj.cnName;
 	return _temp;
 }
 
@@ -231,7 +234,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
 
 			GAME_DATA.fight_enemyChoise = this;
-			alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.name);
+			alert("我方" + GAME_DATA.fight_heroChoise.cnName + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.cnName);
 
 			var nenmyResult = null;
 			var heroResult = null;
@@ -538,7 +541,7 @@ EnemyAIController.prototype.attack = function() {
 				GAME_DATA.enemyFightFieldList[i].fighterHp.setText(_enemyHurt);
 				GAME_DATA.enemyFightFieldList[i].hp = _enemyHurt;
 
-				alert("敌人" + GAME_DATA.enemyFightFieldList[i].name + "攻击了我方的" + max_attack.name);
+				alert("敌人" + GAME_DATA.enemyFightFieldList[i].cnName + "攻击了我方的" + max_attack.cnName);
 
 				// 结算后如果我方随从死亡
 				if (parseInt(max_attack.fighterHp.text) <= 0) {
@@ -628,19 +631,28 @@ RestCardRecord.prototype.refresh = function() {
 // ---卡片的配置信息
 var CARD_INFO = [{
 	"name": "fishman_baby",
+	"cn_name":"鱼人宝宝",
 	"fee": 1,
 	"attack": 1,
 	"hp": 1
 }, {
 	"name": "freshwater_crocodile",
+	"cn_name":"淡水鳄",
 	"fee": 2,
 	"attack": 2,
 	"hp": 3
 }, {
 	"name": "ogre",
+	"cn_name":"食人魔法师",
 	"fee": 4,
 	"attack": 4,
 	"hp": 4
+},{
+	"name": "dead_wing",
+	"cn_name":"死亡之翼",
+	"fee": 9,
+	"attack": 9,
+	"hp": 9
 }];
 
 // ---游戏中所有用到的公共数据
@@ -704,7 +716,7 @@ Hamster.addEventListener(enemyHero, "click", function() {
 	if (GAME_DATA.fight_heroChoise == null) {
 		return;
 	}
-	alert("我方" + GAME_DATA.fight_heroChoise.name + "攻击了敌人的英雄");
+	alert("我方" + GAME_DATA.fight_heroChoise.cnName + "攻击了敌人的英雄");
 	var enemyResult = null;
 	enemyResult = parseInt(enemyHeroHp.text) - parseInt(GAME_DATA.fight_heroChoise.fighterAttack.text);
 	if (enemyResult <= 0) {

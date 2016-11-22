@@ -21,7 +21,10 @@ var Res = {
         { "href": "./public/resource/freshwater_crocodile.png", "name": "freshwater_crocodile" },//淡水鳄卡片
         { "href": "./public/resource/freshwater_crocodile_fight.png", "name": "freshwater_crocodile_fight" },//淡水鳄战斗
         { "href": "./public/resource/ogre.png", "name": "ogre" }, //蓝胖子
-        { "href": "./public/resource/ogre_fight.png", "name": "ogre_fight" } //蓝胖子战斗
+        { "href": "./public/resource/ogre_fight.png", "name": "ogre_fight" }, //蓝胖子战斗
+        { "href": "./public/resource/dead_wing.png", "name": "dead_wing" },
+        { "href": "./public/resource/dead_wing_fight.png", "name": "dead_wing_fight" }
+
     ],
     "fonts": [],
     "sound": []
