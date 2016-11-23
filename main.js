@@ -42,7 +42,7 @@ HandCard.prototype.showHandCardFive = function(handCardList) {
 	var _templist = handCardList.splice(0, 4);
 	GAME_DATA.heroHandCardList = _templist;
 	for (var i = 0; i < _templist.length; i++) {
-		_templist[i].x = 180 + 80 *i;
+		_templist[i].x = 180 + 80 * i;
 
 		// 给生成出来的卡片添加点击事件
 		Hamster.addEventListener(_templist[i], "click", function() {
@@ -140,7 +140,7 @@ EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 		var _temp = new Hamster.UI.Button({
 			"name": CARD_INFO[_num]["name"],
 			"imageName": "card_back",
-			"x": 110 + (85 * (i+1)),
+			"x": 110 + (85 * (i + 1)),
 			"y": 20
 		});
 		_temp.setSize(85, 120);
@@ -232,7 +232,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 
 		//战斗事件
 		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
-
+			if(GAME_DATA.fight_heroChoise.action == 0) return;
 			GAME_DATA.fight_enemyChoise = this;
 			alert("我方" + GAME_DATA.fight_heroChoise.cnName + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.cnName);
 
@@ -418,7 +418,7 @@ function EnemyAIController() {
 // 出牌
 EnemyAIController.prototype.shotCard = function(enemy) {
 	var self = this;
-
+	var shotCardCount = 0;
 	//更新剩余卡牌 
 	enemyCardRemains.refresh();
 	enemy.addCard();
@@ -443,41 +443,50 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 		return;
 	}
 	setTimeout(function() {
+		shotCardCount = 0;
+
 		// 选择合适的卡
 		for (var i = 0; i < GAME_DATA.enemyHandCardList.length; i++) {
 			if (GAME_DATA.enemyHandCardList[i].fee <= enemyFee.currentFee) {
+				enemyFee.currentFee -= GAME_DATA.enemyHandCardList[i].fee;
 				GAME_DATA.enemyFightFieldList.push(GAME_DATA.enemyHandCardList[i]);
 				self.enemyFighter.buildFighter(GAME_DATA.enemyHandCardList[i]);
 				GAME_DATA.enemyHandCardList.splice(i, 1);
 				enemy.refresh("enemy");
 				actionSide = true;
-				turn_over_button.setTexture("hero_turn_button");
 
 				self.enemyFighter.showHeroFighter();
-
-				//更新剩余卡牌数刷新 
-				heroCardRemains.refresh();
-
-				// 改变角色状态
-				hf.changeAction();
-
-				// 增加回合数
-				heroFee.addTurn();
-				enemyFee.addTurn();
-				hero.addCard();
-				return;
+				
+				shotCardCount++;
 			}
 		}
-		actionSide = true;
-		turn_over_button.setTexture("hero_turn_button");
-		alert("电脑选择了不出牌，不知道他有什么阴谋诡计");
 
-		//更新剩余卡牌数刷新 
-		heroCardRemains.refresh();
-		hero.addCard();
-		hf.changeAction();
-		heroFee.addTurn();
-		enemyFee.addTurn();
+		if (shotCardCount == 0) {
+			actionSide = true;
+			turn_over_button.setTexture("hero_turn_button");
+			alert("电脑选择了不出牌，不知道他有什么阴谋诡计");
+			//更新剩余卡牌数刷新 
+			heroCardRemains.refresh();
+			hero.addCard();
+			hf.changeAction();
+			heroFee.addTurn();
+			enemyFee.addTurn();
+			return;
+		} else {
+			//更新剩余卡牌数刷新 
+			heroCardRemains.refresh();
+
+			// 改变角色状态
+			hf.changeAction();
+
+			// 增加回合数
+			heroFee.addTurn();
+			enemyFee.addTurn();
+			hero.addCard();
+
+			turn_over_button.setTexture("hero_turn_button");
+		}
+
 	}, 500);
 
 }
@@ -632,25 +641,25 @@ RestCardRecord.prototype.refresh = function() {
 // ---卡片的配置信息
 var CARD_INFO = [{
 	"name": "fishman_baby",
-	"cn_name":"鱼人宝宝",
+	"cn_name": "鱼人宝宝",
 	"fee": 1,
 	"attack": 1,
 	"hp": 1
 }, {
 	"name": "freshwater_crocodile",
-	"cn_name":"淡水鳄",
+	"cn_name": "淡水鳄",
 	"fee": 2,
 	"attack": 2,
 	"hp": 3
 }, {
 	"name": "ogre",
-	"cn_name":"食人魔法师",
+	"cn_name": "食人魔法师",
 	"fee": 4,
 	"attack": 4,
 	"hp": 4
-},{
+}, {
 	"name": "dead_wing",
-	"cn_name":"死亡之翼",
+	"cn_name": "死亡之翼",
 	"fee": 9,
 	"attack": 9,
 	"hp": 9
