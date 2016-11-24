@@ -37,6 +37,7 @@ Hamster.start = function() {
 
 	// 注册事件系统
 	var sys = new EventListenerSystem(Hamster.cvs);
+	Hamster.sys = sys;
 }
 
 Hamster.update = function() {
@@ -290,21 +291,21 @@ Hamster.remove = function(obj) {
 
 // 清楚某个tag
 Hamster.removeTag = function(tagName) {
-    for (var i = 0; i < Hamster.uiList.length; i++) {
-        if (Hamster.uiList[i].tag == tagName) {
-            Hamster.uiList.splice(i, 1);
-        }
-    }
+	for (var i = 0; i < Hamster.uiList.length; i++) {
+		if (Hamster.uiList[i].tag == tagName) {
+			Hamster.uiList.splice(i, 1);
+		}
+	}
 
-    for (var j = 0; j < Hamster.spriteList.length; j++) {
-        if (Hamster.spriteList[i].tag == tagName) {
-            Hamster.spriteList.splice(i, 1);
-        }
-    }
+	for (var j = 0; j < Hamster.spriteList.length; j++) {
+		if (Hamster.spriteList[i].tag == tagName) {
+			Hamster.spriteList.splice(i, 1);
+		}
+	}
 }
 
 // 清除所有元素
-Hamster.removeAll = function(){
+Hamster.removeAll = function() {
 	// 清除所有的渲染数组
 	Hamster.uiList = [];
 	Hamster.spriteList = [];
@@ -336,9 +337,9 @@ function EventListenerSystem(canvas) {
 		console.log(position.x, position.y);
 	});
 	// canvas.addEventListener('keydown', doKeyDown,true);
-	// window.addEventListener("keydown",function(e){
+	// window.addEventListener("keydown", function(e) {
 	// 	console.log(e.key);
-	// },true);
+	// }, true);
 }
 
 EventListenerSystem.prototype.getClickEventPosition = function(ev) {
@@ -356,12 +357,16 @@ EventListenerSystem.prototype.getClickEventPosition = function(ev) {
 	};
 }
 
+EventListenerSystem.prototype.onKeyDown =function(callback){
+	window.addEventListener("keydown", callback(e), true);
+}
+
 Hamster.addEventListener = function(obj, eventName, callback) {
 	if (eventName == "click") {
 		obj.onClick = callback;
 	}
-
-	if (eventName == "keydown") {
-		obj.onKeyDown = callback;
+	
+	if(eventName == "onKeyDown"){
+		Hamster.sys.onKeyDown(callback);
 	}
 }
