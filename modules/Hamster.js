@@ -1,7 +1,7 @@
 window.Hamster = window.Hamster || {};
 
-Hamster.spriteList = [];    //the list of sprites which need to be rended
-Hamster.uiList = [];        //ui list
+Hamster.spriteList = [];    //需要被渲染的sprite数组
+Hamster.uiList = [];        //需要被渲染的ui数组
 
 Hamster.ctx = null;         //main canvas context
 Hamster.timeloop = null;    //main gameloop

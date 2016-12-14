@@ -4,7 +4,8 @@ Hamster.Preload = {}
 // 加载图片数组
 Hamster.Preload.imageList = [];
 
-Hamster.Preload.init = (function () {
+Hamster.Preload.init = function () {
+    console.log(Hamster.ctx);
     var _visit_list = [];
     for (var i = 0; i < Res["images"].length; i++) {
         (function (index) {
@@ -20,8 +21,13 @@ Hamster.Preload.init = (function () {
     }
     // 监听资源加载情况
     var time = setInterval(function () {
-        console.info("资源加载情况" + Math.floor(_visit_list.length / Res["images"].length * 100) + "%");
+        var _text = "资源加载情况" + Math.floor(_visit_list.length / Res["images"].length * 100) + "%";
+        console.info(_text);
+        Hamster.ctx.fillStyle = "#ffffff";
+        Hamster.ctx.font = "30px";
+        Hamster.ctx.fillText(_text, Hamster.width/2, Hamster.height/2);
 
+        console.log(Hamster.width);
         if (_visit_list.length == Res["images"].length) {
             Hamster.start();
             Hamster.rendingStage();
@@ -29,4 +35,4 @@ Hamster.Preload.init = (function () {
             console.info("加载完成");
         }
     }, 1);
-})();
+};

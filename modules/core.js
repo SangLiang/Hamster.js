@@ -7,17 +7,30 @@
  */
 Hamster.init = function(id, width, height, timeloop, background) {
 	var canvas = document.getElementById(id);
+	console.log(canvas);
 	var ctx = canvas.getContext('2d');
 	var self = this;
 	self.width = width;
 	self.height = height;
 	Hamster.ctx = ctx;
 	Hamster.cvs = canvas;
+
+	Hamster.width = self.width;
+	Hamster.height = self.height;
 	Hamster.timeloop = (1 / 60);
 	Hamster.gameWidth = width;
 	Hamster.gameHeight = height;
 	Hamster.backgroundColor = background || "#333";
 
+	// 载入时的背景颜色
+	Hamster.cvs.style.background = "#000";
+	Hamster.cvs.style.width = width;
+	Hamster.cvs.style.height = height;
+	Hamster.cvs.style.display = "block";
+	Hamster.cvs.style.position = "relative";
+	Hamster.cvs.style.margin = "0 auto";
+
+	Hamster.Preload.init();
 };
 
 /**

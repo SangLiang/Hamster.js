@@ -11,8 +11,8 @@ var $ = require('gulp-load-plugins')();
 var core_list = [
 	"./modules/head.js",
 	"./modules/Hamster.js",
-	"./modules/Preload.js",    //资源加载
 	"./modules/Core.js",
+	"./modules/Preload.js",    //资源加载
 	"./modules/UI.js",
 	"./modules/Animation.js",
 	"./modules/foot.js"
@@ -44,6 +44,7 @@ gulp.task('webserver', function () {
 // 		}))
 // 		.pipe(gulp.dest('./dist/js/'));
 // });
+
 /** 整合js */
 gulp.task('concat', function () {
 	return gulp.src(core_list)
@@ -51,6 +52,7 @@ gulp.task('concat', function () {
 		.pipe(gulp.dest('./dist/js'));
 });
 
+// 监听任务
 gulp.task('watch', function () {
 	gulp.watch("./public/sass/*.scss", ['sass']);
 	gulp.watch(core_list, ["concat"]);
