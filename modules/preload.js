@@ -12,7 +12,7 @@ Hamster.Preload.init = function () {
             var obj = {};
             obj.texture = new Image();
             obj.name = Res["images"][index]["name"];
-            obj.texture.src = Res["images"][index]["href"];
+            obj.texture.src = Res["images"][index]["src"];
             obj.texture.onload = function () {
                 _visit_list.push(obj);
                 Hamster.Preload.imageList.push(obj);
