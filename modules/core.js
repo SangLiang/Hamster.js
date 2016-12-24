@@ -7,7 +7,6 @@
  */
 Hamster.init = function(id, width, height, timeloop, background) {
 	var canvas = document.getElementById(id);
-	console.log(canvas);
 	var ctx = canvas.getContext('2d');
 	var self = this;
 	self.width = width;
@@ -24,8 +23,8 @@ Hamster.init = function(id, width, height, timeloop, background) {
 
 	// 载入时的背景颜色
 	Hamster.cvs.style.background = "#000";
-	Hamster.cvs.style.width = width;
-	Hamster.cvs.style.height = height;
+	Hamster.cvs.width = width;
+	Hamster.cvs.height = height;
 	Hamster.cvs.style.display = "block";
 	Hamster.cvs.style.position = "relative";
 	Hamster.cvs.style.margin = "0 auto";

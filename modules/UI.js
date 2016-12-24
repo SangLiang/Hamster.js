@@ -4,6 +4,7 @@
 
 Hamster.UI = {};
 
+// 按钮
 function _Button(obj) {
 	this.text = obj.text || null;
 	_Sprite.call(this, obj);
@@ -41,7 +42,6 @@ _Button.prototype.draw = function (text) {
 Hamster.UI.Button = function (name, imageName, x, y, w, h) {
 	return new _Button(name, imageName, x, y, w, h);
 }
-// 按钮
 
 // 文本类
 function _Text(obj) {
