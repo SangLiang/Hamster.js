@@ -277,6 +277,22 @@ Hamster.removeGameLoop = function() {
 	}
 }
 
+// loop and setTimeout
+function _timeSystem(id,time,callback){
+	var self = this;
+	self.id = id;
+	self.time = time;
+	self.callback = self.callback;
+}
+
+_timeSystem.prototype.addTimeout = function (){
+	setTimeout(self.callback(),self.time);
+}
+
+Hamster.addTimeout = function(id,time,callback){
+	return new_timeSystem(id,time,callback);
+}
+
 /**add to stage */
 Hamster.add = function(gameObj, x, y) {
 	var self = this;
