@@ -202,7 +202,7 @@ _Sprite.prototype.setTexture = function(textureName) {
 	this.texture = Hamster.getImageTexture(this.imageName);
 }
 
-_Sprite.prototype.add = function(gameObj, _x, _y) {
+_Sprite.prototype.add = function(gameObj, x, y) {
 	gameObj._parent = this.gameObj.name;
 }
 
@@ -348,10 +348,6 @@ function EventListenerSystem(canvas) {
 
 		console.log(position.x, position.y);
 	});
-	// canvas.addEventListener('keydown', doKeyDown,true);
-	// window.addEventListener("keydown", function(e) {
-	// 	console.log(e.key);
-	// }, true);
 }
 
 EventListenerSystem.prototype.getClickEventPosition = function(ev) {
@@ -369,16 +365,35 @@ EventListenerSystem.prototype.getClickEventPosition = function(ev) {
 	};
 }
 
-EventListenerSystem.prototype.onKeyDown =function(callback){
-	window.addEventListener("keydown", callback(e), true);
+EventListenerSystem.prototype.keyEvent = function(callback, eventName) {
+	if (!window) {
+		console.log("window is undefined");
+		return;
+	}
+	if (eventName == "keyDown") {
+		window.addEventListener("keydown", function(e) {
+			callback(e);
+		}, true);
+	} else if (eventName == "keyUp") {
+		window.addEventListener("keyup", function(e) {
+			callback(e);
+		}, true);
+	} else if (eventName == "keyPress") {
+		window.addEventListener("keypress", function(e) {
+			callback(e);
+		}, true);
+	}
+
+
 }
 
 Hamster.addEventListener = function(obj, eventName, callback) {
+	var sys = new EventListenerSystem(Hamster.cvs);
+
 	if (eventName == "click") {
 		obj.onClick = callback;
 	}
-	
-	if(eventName == "onKeyDown"){
-		Hamster.sys.onKeyDown(callback);
+	if (eventName == "keyDown") {
+		sys.keyEvent(callback,eventName);
 	}
 }

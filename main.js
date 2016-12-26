@@ -20,7 +20,7 @@ HandCard.prototype.buildHandCardList = function(num, randomRange) {
 		var _list = [];
 		for (var i = 0; i < num; i++) {
 			var _num = Math.floor(Math.random() * randomRange);
-			var _temp = new Hamster.UI.Button({
+			var _temp = Hamster.UI.Button({
 				"name": "_temp",
 				"imageName": CARD_INFO[_num]["name"],
 				"x": 180 + 80 * i,
@@ -137,7 +137,7 @@ EnemyCard.prototype.buildHandCardList = function(num, randomRange) {
 	var _list = [];
 	for (var i = 0; i < num; i++) {
 		var _num = Math.floor(Math.random() * randomRange);
-		var _temp = new Hamster.UI.Button({
+		var _temp = Hamster.UI.Button({
 			"name": CARD_INFO[_num]["name"],
 			"imageName": "card_back",
 			"x": 110 + (85 * (i + 1)),
@@ -190,7 +190,7 @@ HeroFighter.prototype.buildFighter = function(obj) {
 	if (!obj) {
 		return;
 	}
-	var _temp = new Hamster.UI.Button({
+	var _temp = Hamster.UI.Button({
 		"name": obj.name + "_fighter",
 		"imageName": obj.imageName + "_fight",
 		"x": 0,
@@ -213,7 +213,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 		// setTexture会直接切换图片
 		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].setTexture(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_fight");
 		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x = 180 + (GAME_DATA.enemyFightFieldList.length - 1) * 85;
-		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack = new Hamster.UI.Text({
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterAttack = Hamster.UI.Text({
 			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_attack",
 			"fontSize": 18,
 			"color": "#fff",
@@ -221,7 +221,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 			"x": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].x + 10,
 			"y": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].y + 110
 		});
-		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp = new Hamster.UI.Text({
+		GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].fighterHp = Hamster.UI.Text({
 			"name": GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1].name + "_hp",
 			"fontSize": 18,
 			"color": "#fff",
@@ -232,7 +232,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 
 		//战斗事件
 		Hamster.addEventListener(GAME_DATA.enemyFightFieldList[GAME_DATA.enemyFightFieldList.length - 1], "click", function() {
-			if(GAME_DATA.fight_heroChoise.action == 0) return;
+			if (GAME_DATA.fight_heroChoise.action == 0) return;
 			GAME_DATA.fight_enemyChoise = this;
 			alert("我方" + GAME_DATA.fight_heroChoise.cnName + "攻击了敌人的" + GAME_DATA.fight_enemyChoise.cnName);
 
@@ -288,7 +288,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 		var i = GAME_DATA.heroFightFieldList.length - 1;
 		GAME_DATA.heroFightFieldList[i].x = 180 + i * 85;
 		Hamster.add(GAME_DATA.heroFightFieldList[i]);
-		GAME_DATA.heroFightFieldList[i].fighterAttack = new Hamster.UI.Text({
+		GAME_DATA.heroFightFieldList[i].fighterAttack = Hamster.UI.Text({
 			"name": GAME_DATA.heroFightFieldList[i].name + "_attack",
 			"fontSize": 18,
 			"color": "#fff",
@@ -296,7 +296,7 @@ HeroFighter.prototype.showHeroFighter = function() {
 			"x": GAME_DATA.heroFightFieldList[i].x + 10,
 			"y": GAME_DATA.heroFightFieldList[i].y + 110
 		});
-		GAME_DATA.heroFightFieldList[i].fighterHp = new Hamster.UI.Text({
+		GAME_DATA.heroFightFieldList[i].fighterHp = Hamster.UI.Text({
 			"name": GAME_DATA.heroFightFieldList[i].name + "_hp",
 			"fontSize": 18,
 			"color": "#fff",
@@ -365,14 +365,14 @@ function FeeManager(currentFee, round, x, y) {
 
 FeeManager.prototype.init = function() {
 	// 玩家计费器
-	this.feeCount = new Hamster.UI.Button({
+	this.feeCount = Hamster.UI.Button({
 		"name": "FeeCount",
 		"imageName": "fee",
 		"x": this.x,
 		"y": this.y
 	});
 
-	this.currentFeeText = new Hamster.UI.Text({
+	this.currentFeeText = Hamster.UI.Text({
 		"fontSize": 18,
 		"x": this.feeCount.x + 45,
 		"y": this.feeCount.y + 32,
@@ -456,7 +456,7 @@ EnemyAIController.prototype.shotCard = function(enemy) {
 				actionSide = true;
 
 				self.enemyFighter.showHeroFighter();
-				
+
 				shotCardCount++;
 			}
 		}
@@ -589,7 +589,7 @@ function RestCardRecord(side) {
 // 初始化
 RestCardRecord.prototype.init = function() {
 	if (this.side == "hero") {
-		this.card = new Hamster.UI.Button({
+		this.card = Hamster.UI.Button({
 			"imageName": "card_back",
 			"x": 640,
 			"y": 390
@@ -598,7 +598,7 @@ RestCardRecord.prototype.init = function() {
 
 		var text = hero.cardList.length;
 
-		this.remain = new Hamster.UI.Text({
+		this.remain = Hamster.UI.Text({
 			"name": "myHeroHp",
 			"text": text,
 			"fontSize": "25",
@@ -611,7 +611,7 @@ RestCardRecord.prototype.init = function() {
 	}
 
 	if (this.side == "enemy") {
-		this.card = new Hamster.UI.Button({
+		this.card = Hamster.UI.Button({
 			"imageName": "card_back",
 			"x": 640,
 			"y": 130
@@ -620,7 +620,7 @@ RestCardRecord.prototype.init = function() {
 
 		var text = enemy.cardList.length;
 
-		this.remain = new Hamster.UI.Text({
+		this.remain = Hamster.UI.Text({
 			"name": "myHeroHp",
 			"text": text,
 			"fontSize": "25",
@@ -706,7 +706,7 @@ var enemyCardRemains = new RestCardRecord("enemy");
 
 //---游戏主逻辑
 // 背景
-var background = new Hamster.sprite({
+var background = Hamster.sprite({
 	"name": "background",
 	"imageName": "background",
 	"x": 0,
@@ -715,7 +715,7 @@ var background = new Hamster.sprite({
 Hamster.add(background);
 
 // 敌人英雄头像
-var enemyHero = new Hamster.sprite({
+var enemyHero = Hamster.sprite({
 	"name": "enemyHero",
 	"imageName": "fighter_hero",
 	"x": 10,
@@ -739,7 +739,7 @@ Hamster.addEventListener(enemyHero, "click", function() {
 });
 Hamster.add(enemyHero);
 
-var myHeroHpBackground = new Hamster.UI.Button({
+var myHeroHpBackground = Hamster.UI.Button({
 	"name": "myHeroHpBackground",
 	"imageName": "hp_background",
 	"x": 10,
@@ -747,7 +747,7 @@ var myHeroHpBackground = new Hamster.UI.Button({
 });
 Hamster.add(myHeroHpBackground);
 
-var myHeroHp = new Hamster.UI.Text({
+var myHeroHp = Hamster.UI.Text({
 	"name": "myHeroHp",
 	"text": "20",
 	"fontSize": "25",
@@ -757,7 +757,7 @@ var myHeroHp = new Hamster.UI.Text({
 });
 Hamster.add(myHeroHp);
 
-var enemyHeroHpBackground = new Hamster.UI.Button({
+var enemyHeroHpBackground = Hamster.UI.Button({
 	"name": "enemyHeroHpBackground",
 	"imageName": "hp_background",
 	"x": 10,
@@ -765,7 +765,7 @@ var enemyHeroHpBackground = new Hamster.UI.Button({
 });
 Hamster.add(enemyHeroHpBackground);
 
-var enemyHeroHp = new Hamster.UI.Text({
+var enemyHeroHp = Hamster.UI.Text({
 	"name": "enemyHeroHp",
 	"text": "30",
 	"fontSize": "25",
@@ -776,7 +776,7 @@ var enemyHeroHp = new Hamster.UI.Text({
 Hamster.add(enemyHeroHp);
 
 // 敌人英雄头像
-var myHero = new Hamster.sprite({
+var myHero = Hamster.sprite({
 	"name": "myHero",
 	"imageName": "fighter_hero",
 	"x": 10,
@@ -785,7 +785,7 @@ var myHero = new Hamster.sprite({
 Hamster.add(myHero);
 
 // 回合结束按钮
-var turn_over_button = new Hamster.UI.Button({
+var turn_over_button = Hamster.UI.Button({
 	"name": "turn_over_button",
 	"imageName": "hero_turn_button",
 	"x": 670,
@@ -807,7 +807,7 @@ Hamster.addEventListener(turn_over_button, "click", function() {
 Hamster.add(turn_over_button);
 
 // 出牌按钮
-var shot_card_button = new Hamster.UI.Button({
+var shot_card_button = Hamster.UI.Button({
 	"name": "shot_card_button",
 	"imageName": "shot_card",
 	"x": 20,
