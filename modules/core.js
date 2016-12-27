@@ -400,7 +400,7 @@ Hamster.addEventListener = function (obj, eventName, callback) {
 	if (eventName == "click") {
 		obj.onClick = callback;
 	}
-	if (eventName == "keyDown") {
+	if (eventName == "keyDown" || eventName == "keyUp" || eventName == "keyPress") {
 		sys.keyEvent(callback, eventName);
 	}
 }
