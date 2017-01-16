@@ -243,7 +243,7 @@ _Sprite.prototype.onClick = function (callback) {
 	callback();
 }
 // 生成类的方法
-Hamster.sprite = function (name, imageName, x, y, w, h) {
+Hamster.Sprite = function (name, imageName, x, y, w, h) {
 	return new _Sprite(name, imageName, x, y, w, h);
 };
 
@@ -395,12 +395,12 @@ EventListenerSystem.prototype.keyEvent = function (callback, eventName) {
 }
 
 Hamster.addEventListener = function (obj, eventName, callback) {
-	var sys = new EventListenerSystem(Hamster.cvs);
 
 	if (eventName == "click") {
 		obj.onClick = callback;
 	}
 	if (eventName == "keyDown" || eventName == "keyUp" || eventName == "keyPress") {
+		var sys = new EventListenerSystem(Hamster.cvs);
 		sys.keyEvent(callback, eventName);
 	}
 }

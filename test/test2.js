@@ -1,6 +1,6 @@
 Hamster.init("main", 800, 600);
 
-var obj = Hamster.sprite({
+var obj = Hamster.Sprite({
     "name": "background",
     "imageName": "background",
     "x": 0,
@@ -13,16 +13,18 @@ Hamster.addEventListener(obj, "keyDown", function (e) {
 
     if (e.code == "KeyJ") {
         console.log(3);
-        obj.x = obj.x - 10;
-        Hamster.remove(obj);
+        obj.x = obj.x - 500;
+        setTimeout(function(){
+            Hamster.remove(obj);
+        },1000);
     }
 });
 
 console.log(Hamster.spriteList.length);
 
-setTimeout(function(){
-    Hamster.remove(obj);
-},2000);
+// setTimeout(function(){
+//     Hamster.remove(obj);
+// },2000);
 
 // var sa = Hamster.addTimeout("sa", 5000, function () {
 //     console.log("*************");

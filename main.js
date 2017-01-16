@@ -46,6 +46,7 @@ HandCard.prototype.showHandCardFive = function(handCardList) {
 
 		// 给生成出来的卡片添加点击事件
 		Hamster.addEventListener(_templist[i], "click", function() {
+			console.log(1);
 			if (this.status == "normal") {
 				for (var i = 0; i < _templist.length; i++) {
 					_templist[i].status = "normal";
@@ -706,7 +707,7 @@ var enemyCardRemains = new RestCardRecord("enemy");
 
 //---游戏主逻辑
 // 背景
-var background = Hamster.sprite({
+var background = Hamster.Sprite({
 	"name": "background",
 	"imageName": "background",
 	"x": 0,
@@ -715,7 +716,7 @@ var background = Hamster.sprite({
 Hamster.add(background);
 
 // 敌人英雄头像
-var enemyHero = Hamster.sprite({
+var enemyHero = Hamster.Sprite({
 	"name": "enemyHero",
 	"imageName": "fighter_hero",
 	"x": 10,
@@ -776,7 +777,7 @@ var enemyHeroHp = Hamster.UI.Text({
 Hamster.add(enemyHeroHp);
 
 // 敌人英雄头像
-var myHero = Hamster.sprite({
+var myHero = Hamster.Sprite({
 	"name": "myHero",
 	"imageName": "fighter_hero",
 	"x": 10,
