@@ -20,6 +20,13 @@ Hamster.addEventListener(obj, "keyDown", function (e) {
     }
 });
 
+console.log(obj);
+obj.isTrigger = true;
+
+Hamster.addEventListener(obj,"click",function(e){
+    console.log(e);
+});
+
 console.log(Hamster.spriteList.length);
 
 // setTimeout(function(){

@@ -46,7 +46,6 @@ HandCard.prototype.showHandCardFive = function(handCardList) {
 
 		// 给生成出来的卡片添加点击事件
 		Hamster.addEventListener(_templist[i], "click", function() {
-			console.log(1);
 			if (this.status == "normal") {
 				for (var i = 0; i < _templist.length; i++) {
 					_templist[i].status = "normal";
