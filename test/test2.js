@@ -8,16 +8,15 @@ var obj = Hamster.Sprite({
 });
 
 Hamster.add(obj);
-// Hamster.remove(obj);
 Hamster.addEventListener(obj, "keyDown", function (e) {
-
+ 
     if (e.code == "KeyJ") {
-        console.log(3);
-        obj.x = obj.x - 500;
-        setTimeout(function(){
-            Hamster.remove(obj);
-        },1000);
+        obj.x = obj.x - 200;
     }
+
+    Hamster.removeEventListener(null,"keyDown",function(){
+        console.log(1);
+    });
 });
 
 console.log(obj);
@@ -28,14 +27,3 @@ Hamster.addEventListener(obj,"click",function(e){
 });
 
 console.log(Hamster.spriteList.length);
-
-// setTimeout(function(){
-//     Hamster.remove(obj);
-// },2000);
-
-// var sa = Hamster.addTimeout("sa", 5000, function () {
-//     console.log("*************");
-//     console.log(obj);
-//     Hamster.remove(obj);
-//     console.log(Hamster.spriteList.length);
-// });

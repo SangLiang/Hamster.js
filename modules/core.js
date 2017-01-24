@@ -393,6 +393,28 @@ EventListenerSystem.prototype.keyEvent = function (callback, eventName) {
 		}, true);
 	}
 }
+// 移除键盘事件
+EventListenerSystem.prototype.removeKeyEvent = function (callback, eventName) {
+	if (!window) {
+		console.log("window is undefined");
+		return;
+	}
+	if (eventName == "keyDown") {
+		window.addEventListener("keydown", function (e) {
+			console.warn(window);
+			console.log("yunxingle");
+			return;
+		}, true);
+	} else if (eventName == "keyUp") {
+		window.removeEventListener("keyup", function (e) {
+			callback(e);
+		}, true);
+	} else if (eventName == "keyPress") {
+		window.removeEventListener("keypress", function (e) {
+			callback(e);
+		}, true);
+	}
+}
 
 Hamster.addEventListener = function (obj, eventName, callback) {
 
@@ -402,5 +424,17 @@ Hamster.addEventListener = function (obj, eventName, callback) {
 	if (eventName == "keyDown" || eventName == "keyUp" || eventName == "keyPress") {
 		var sys = new EventListenerSystem(Hamster.cvs);
 		sys.keyEvent(callback, eventName);
+	}
+}
+
+Hamster.removeEventListener = function (obj, eventName, callback) {
+	if (eventName == "click") {
+		obj.onClick = null;
+	}
+
+	if (eventName == "keyDown" || eventName == "keyUp" || eventName == "keyPress") {
+		Hamster.sys.removeKeyEvent(callback, eventName);
+		console.log(eventName);
+		console.log(Hamster.sys);
 	}
 }
